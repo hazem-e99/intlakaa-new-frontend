@@ -1,0 +1,36 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+
+# Environment files with sensitive data
+# .env.local, .env.*.local are automatically ignored by *.local pattern
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Next.js build output
+.next/
+out/
+
+# Generated SEO artifacts (created by next-sitemap in postbuild)
+public/sitemap.xml
+public/sitemap-*.xml
+public/robots.txt

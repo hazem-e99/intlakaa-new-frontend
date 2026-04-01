@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>انطلاقة | وكالة تسويق</title>
+    <meta name="description" content="بنساعدك تخلي نموك أسرع وحملاتك أذكى مع استراتيجيات تسويقية قائمة على النتائج" />
+    <meta name="author" content="انطلاقة" />
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.web3forms.com" crossorigin>
+
+    <!-- Async font stylesheet to avoid blocking first paint -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
+    </noscript>
+
+    <!-- Open Graph / Social Media Tags -->
+    <meta property="og:title" content="انطلاقة | وكالة تسويق رائدة" />
+    <meta property="og:description" content="بنساعدك تخلي نموك أسرع وحملاتك أذكى مع استراتيجيات تسويقية قائمة على النتائج" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logo.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="انطلاقة | وكالة تسويق" />
+    <meta name="twitter:description" content="بنساعدك تخلي نموك أسرع وحملاتك أذكى" />
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#2B0862" />
+
+    <!-- Defer Google tag loading to protect LCP and INP -->
+    <script>
+      (function() {
+        var loadTag = function() {
+          if (document.getElementById('gtag-aw-loader')) return;
+
+          var script = document.createElement('script');
+          script.id = 'gtag-aw-loader';
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17940276286';
+          document.head.appendChild(script);
+
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', 'AW-17940276286');
+        };
+
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadTag, { timeout: 2500 });
+        } else {
+          window.addEventListener('load', loadTag, { once: true });
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
