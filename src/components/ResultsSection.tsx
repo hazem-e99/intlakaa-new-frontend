@@ -1,28 +1,11 @@
-import { memo, useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { memo } from "react";
+import { motion } from "framer-motion";
 import { TrendingUp, Users, Target, Rocket, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 
-/* ── Animated Counter ──────────────────────────────────── */
-function AnimatedStat({ target, suffix = "", prefix = "", duration = 2200 }: { target: number; suffix?: string; prefix?: string; duration?: number }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, target, duration]);
-
-  return <span ref={ref}>{prefix}{count.toLocaleString("ar-SA")}{suffix}</span>;
+function StatNumber({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
+  return <span>{prefix}{target.toLocaleString("ar-SA")}{suffix}</span>;
 }
 
 /* ── Data ──────────────────────────────────────────────── */
@@ -104,7 +87,7 @@ function ResultCard({ icon: Icon, value, suffix, prefix, label, description, col
             filter: `drop-shadow(0 4px 15px ${color}30)`,
           }}
         >
-          <AnimatedStat target={value} suffix={suffix} prefix={prefix} />
+          <StatNumber target={value} suffix={suffix} prefix={prefix} />
         </div>
         
         {/* Label */}

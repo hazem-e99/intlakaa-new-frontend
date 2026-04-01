@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { memo, useState, useRef, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
+import { usePerPage } from "@/hooks/use-per-page";
 
 interface VideoCard {
   id: string;
@@ -81,21 +82,6 @@ const videos: VideoCard[] = [
     ],
   },
 ];
-
-function usePerPage() {
-  const [perPage, setPerPage] = useState(3);
-  useEffect(() => {
-    const update = () => {
-      if (window.innerWidth <= 768) setPerPage(1);
-      else if (window.innerWidth <= 1024) setPerPage(2);
-      else setPerPage(3);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return perPage;
-}
 
 const CaseStudySection = () => {
   const [currentPage, setCurrentPage] = useState(0);

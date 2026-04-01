@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -6,31 +6,8 @@ import { FaArrowLeft, FaCheckCircle, FaWhatsapp, FaChartLine, FaUsers, FaBolt, F
 import { pushGTMEvent } from "@/utils/gtm";
 import prefetchForm from "@/lib/prefetchForm";
 
-// ── Animated Counter ──────────────────────────────────────────────────────────
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const [started, setStarted] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setStarted(true); }, { threshold: 0.5 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    let start = 0;
-    const step = target / (1800 / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [started, target]);
-
-  return <span ref={ref}>{count.toLocaleString("ar-SA")}{suffix}</span>;
+function StatNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
+  return <span>{target.toLocaleString("ar-SA")}{suffix}</span>;
 }
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -230,7 +207,7 @@ const AdsLanding = () => {
                 className="text-center"
               >
                 <div className="text-3xl md:text-4xl font-black mb-1" style={{ color: s.color }}>
-                  <AnimatedCounter target={s.value} suffix={s.suffix} />
+                  <StatNumber target={s.value} suffix={s.suffix} />
                 </div>
                 <div className="text-xs md:text-sm text-white/50">{s.label}</div>
               </motion.div>

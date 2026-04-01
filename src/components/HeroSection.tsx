@@ -1,54 +1,12 @@
 import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo } from "react";
 import Image from "next/image";
 import { ArrowLeft, TrendingUp, Users, Zap, Star } from "lucide-react";
 import { pushGTMEvent } from "@/utils/gtm";
 
-/* ── Animated Counter ──────────────────────────────────── */
-function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setInView(true);
-        observer.disconnect();
-      },
-      { rootMargin: "120px" }
-    );
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView) return;
-    let rafId = 0;
-    const duration = 1400;
-    let startAt: number | null = null;
-
-    const run = (timestamp: number) => {
-      if (startAt === null) startAt = timestamp;
-      const progress = Math.min((timestamp - startAt) / duration, 1);
-      setCount(Math.floor(progress * target));
-
-      if (progress < 1) {
-        rafId = window.requestAnimationFrame(run);
-      }
-    };
-
-    rafId = window.requestAnimationFrame(run);
-    return () => {
-      if (rafId) window.cancelAnimationFrame(rafId);
-    };
-  }, [inView, target]);
-
-  return <span ref={ref}>{prefix}{count.toLocaleString("ar-SA")}{suffix}</span>;
+function StatNumber({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
+  return <span>{prefix}{target.toLocaleString("ar-SA")}{suffix}</span>;
 }
 
 const ORBS = [
@@ -204,7 +162,7 @@ const HeroSection = () => {
                     <div className="flex items-center gap-1.5 md:gap-2 justify-center lg:justify-start mb-1">
                       <Icon className="w-4 h-4 hidden sm:block" style={{ color: stat.color }} />
                       <span className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: stat.color }}>
-                        <AnimatedCounter target={stat.target} suffix={stat.suffix} />
+                        <StatNumber target={stat.target} suffix={stat.suffix} />
                       </span>
                     </div>
                     <div className="text-[10px] sm:text-xs md:text-sm text-white/55 font-medium">{stat.label}</div>
@@ -231,12 +189,12 @@ const HeroSection = () => {
                 src="/hero-section.webp"
                 alt="وكالة انطلاقة للخدمات التسويقية"
                 priority
-                unoptimized
+                fetchPriority="high"
                 width={2000}
                 height={1333}
                 sizes="(max-width: 768px) 90vw, (max-width: 1200px) 60vw, 50vw"
+                quality={75}
                 className="w-full h-auto object-contain"
-                style={{ filter: "drop-shadow(0 25px 45px rgba(155,80,232,0.2))" }}
               />
             </div>
 

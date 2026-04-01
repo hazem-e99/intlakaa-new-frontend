@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { pushGTMEvent } from "@/utils/gtm";
 import { fetchPages, Page } from "@/services/cmsService";
@@ -145,7 +145,6 @@ const Navbar = () => {
               alt="انطلاقة"
               width={795}
               height={254}
-              priority
               sizes="(max-width: 768px) 160px, 200px"
               className="h-10 md:h-11 w-auto relative z-10 transition-transform duration-300 group-hover:scale-105"
               style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.3))" }}
@@ -253,4 +252,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

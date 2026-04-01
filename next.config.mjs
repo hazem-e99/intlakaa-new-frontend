@@ -14,6 +14,7 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  swcMinify: true,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -28,7 +29,42 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "react-icons"],
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "react-icons/fa6",
+      "react-icons/si",
+      "react-icons/md",
+      "react-icons/io5",
+      "framer-motion",
+      "recharts",
+      "date-fns",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-select",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-tooltip",
+      "@radix-ui/react-popover",
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
+        ],
+      },
+      {
+        source: "/(.*)\\.(jpg|jpeg|png|webp|avif|svg|ico|woff2)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
   },
   webpack: (config) => {
     config.resolve.alias = {

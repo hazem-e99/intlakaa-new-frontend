@@ -1,7 +1,7 @@
 import type { Page, Post } from "@/services/cmsService";
 import type { SeoSettings } from "@/services/seoService";
 
-const REQUEST_TIMEOUT_MS = 5000;
+const REQUEST_TIMEOUT_MS = 3000;
 
 const normalizeOrigin = (value: string) => value.replace(/\/$/, "").replace(/\/api\/?$/, "");
 
@@ -42,7 +42,7 @@ export const toAbsoluteUrl = (siteUrl: string, value?: string | null) => {
   return `${origin}${path}`;
 };
 
-const fetchJson = async <T>(path: string): Promise<T | null> => {
+const fetchJson = async <T>(path: string, revalidate?: number): Promise<T | null> => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -53,7 +53,8 @@ const fetchJson = async <T>(path: string): Promise<T | null> => {
         Accept: "application/json",
       },
       signal: controller.signal,
-    });
+      next: revalidate != null ? { revalidate } : undefined,
+    } as RequestInit);
 
     if (!response.ok) {
       return null;
@@ -77,27 +78,27 @@ type ApiEntityResponse<T> = {
 };
 
 export const getSeoSettingsServer = async (): Promise<SeoSettings | null> => {
-  const payload = await fetchJson<ApiEntityResponse<SeoSettings>>("/seo");
+  const payload = await fetchJson<ApiEntityResponse<SeoSettings>>("/seo", 300);
   return payload?.data || null;
 };
 
 export const getPublishedPostsServer = async (limit = 100): Promise<Post[]> => {
-  const payload = await fetchJson<ApiCollectionResponse<Post>>(`/posts?status=published&limit=${limit}`);
+  const payload = await fetchJson<ApiCollectionResponse<Post>>(`/posts?status=published&limit=${limit}`, 120);
   return payload?.data || [];
 };
 
 export const getPostBySlugServer = async (slug: string): Promise<Post | null> => {
-  const payload = await fetchJson<ApiEntityResponse<Post>>(`/posts/slug/${encodeURIComponent(slug)}`);
+  const payload = await fetchJson<ApiEntityResponse<Post>>(`/posts/slug/${encodeURIComponent(slug)}`, 120);
   return payload?.data || null;
 };
 
 export const getPublishedPagesServer = async (): Promise<Page[]> => {
-  const payload = await fetchJson<ApiCollectionResponse<Page>>("/pages?status=published&type=page");
+  const payload = await fetchJson<ApiCollectionResponse<Page>>("/pages?status=published&type=page", 120);
   return payload?.data || [];
 };
 
 export const getPageBySlugServer = async (slug: string): Promise<Page | null> => {
-  const payload = await fetchJson<ApiEntityResponse<Page>>(`/pages/slug/${encodeURIComponent(slug)}`);
+  const payload = await fetchJson<ApiEntityResponse<Page>>(`/pages/slug/${encodeURIComponent(slug)}`, 120);
   return payload?.data || null;
 };
 

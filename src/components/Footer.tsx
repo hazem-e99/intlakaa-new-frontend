@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { fetchSeoSettings, type SocialLink, type ContactInfo } from "@/services/seoService";
-import { ICON_MAP } from "@/pages/SEOManagement";
+import { ICON_MAP } from "@/lib/iconMap";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Image from "next/image";
@@ -152,4 +152,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);
