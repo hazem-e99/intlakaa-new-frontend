@@ -8,11 +8,53 @@ interface ClientVideo {
   src: string;
 }
 
-// List of available video IDs based on actual files
 const clientVideos: ClientVideo[] = [1, 2, 3, 4, 6, 7, 13].map((id) => ({
   id,
   src: `/clients/${id}.mp4`,
 }));
+
+// Loads video metadata lazily (only when visible) to show the first frame
+function VideoThumbnail({ src }: { src: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setActive(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 bg-[#0a0a1a]">
+      {active && (
+        <video
+          ref={videoRef}
+          src={src}
+          preload="metadata"
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          onLoadedMetadata={() => {
+            if (videoRef.current) videoRef.current.currentTime = 0.001;
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
 const ClientsSection = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -156,18 +198,10 @@ const ClientsSection = () => {
                       onClick={() => setModalVideoSrc(video.src)}
                     >
                       {/* Video Thumbnail Container */}
-                      <div className="relative w-full pt-[56.25%] flex-shrink-0 bg-[#0a0a1a]">
-                        <div
-                          className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-center px-5"
-                          style={{
-                            background:
-                              "linear-gradient(140deg, rgba(155,80,232,0.25), rgba(96,165,250,0.2) 50%, rgba(21,11,46,0.95))",
-                          }}
-                        >
-                          <p className="text-white/75 text-sm font-semibold leading-relaxed">
-                            شاهد قصة نجاح عميلنا بالفيديو
-                          </p>
-                        </div>
+                      <div className="relative w-full pt-[56.25%] flex-shrink-0">
+                        <VideoThumbnail src={video.src} />
+                        {/* Dark overlay on hover */}
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-[1]" />
                         {/* Play Button */}
                         <button
                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-red-600/85 rounded-2xl flex items-center justify-center z-[2] group-hover:scale-110 group-hover:bg-red-600 transition-all"
