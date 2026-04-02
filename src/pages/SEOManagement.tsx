@@ -469,7 +469,7 @@ export default function SEOManagement() {
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="og-image">رابط صورة المعاينة</Label>
-                                <Input id="og-image" value={seo.ogImage} onChange={handleChange("ogImage")} placeholder="https://intlakaa.com/og-image.jpg أو /logo.png" />
+                                <Input id="og-image" value={seo.ogImage} onChange={handleChange("ogImage")} placeholder="https://intlakaa.com/og-image.jpg أو /logo.webp" />
                                 <p className="text-xs text-muted-foreground">أبعاد الصورة الموصى بها: 1200 × 630 بكسل</p>
                             </div>
                             <div className="grid gap-2">

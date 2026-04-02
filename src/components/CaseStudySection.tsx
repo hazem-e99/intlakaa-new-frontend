@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { memo, useState, useRef, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
 import { usePerPage } from "@/hooks/use-per-page";
+import FadeIn from "@/components/FadeIn";
 
 interface VideoCard {
   id: string;
@@ -86,6 +86,7 @@ const videos: VideoCard[] = [
 const CaseStudySection = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVideoId, setModalVideoId] = useState<string | null>(null);
+  const [isExiting, setIsExiting] = useState(false);
   const [cardWidth, setCardWidth] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const perPage = usePerPage();
@@ -94,6 +95,15 @@ const CaseStudySection = () => {
   // Touch swipe state
   const touchStartX = useRef(0);
   const touchDiffX = useRef(0);
+
+  const closeModal = useCallback(() => {
+    if (isExiting || !modalVideoId) return;
+    setIsExiting(true);
+    window.setTimeout(() => {
+      setModalVideoId(null);
+      setIsExiting(false);
+    }, 300);
+  }, [isExiting, modalVideoId]);
 
   const goNext = useCallback(() => {
     setCurrentPage((prev) => (prev + 1 >= totalPages ? 0 : prev + 1));
@@ -128,11 +138,11 @@ const CaseStudySection = () => {
   // Close modal on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setModalVideoId(null);
+      if (e.key === "Escape") closeModal();
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, []);
+  }, [closeModal]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -159,13 +169,7 @@ const CaseStudySection = () => {
       <section className="section-py px-4 section-bg-elevated overflow-hidden" id="casestudies">
         <div className="container mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
+          <FadeIn delay={0} direction="up" duration={0.6} className="text-center mb-12">
             <div className="w-[50px] h-[3px] rounded-full mx-auto mb-4" style={{ background: 'linear-gradient(to left, #9b50e8, #7c3aed)' }} />
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 leading-[1.5] max-w-4xl mx-auto text-white">
               هدفنا مو بس نسوّي حملات… نسوّي حملات تنذكر كـ Case Study
@@ -174,7 +178,7 @@ const CaseStudySection = () => {
               شاهد التحليل من لوحات التحكم — نتائج حقيقية مباشرة من داخل حسابات
               عملائنا.
             </p>
-          </motion.div>
+          </FadeIn>
 
           {/* Carousel */}
           <div className="relative mt-6">
@@ -182,8 +186,8 @@ const CaseStudySection = () => {
               {/* Prev Button */}
               <button
                 onClick={goPrev}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
-                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
+                className="cta-hover hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)' }}
                 aria-label="السابق"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -216,59 +220,66 @@ const CaseStudySection = () => {
                   }}
                 >
                   {videos.map((video, index) => (
-                    <motion.div
+                    <FadeIn
                       key={video.id}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.08 }}
-                      className={`${cardFlexBasis} rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group`}
-                      style={{ background: 'rgba(13,5,32,0.9)', border: '1px solid rgba(155,80,232,0.12)' }}
-                      onClick={() => setModalVideoId(video.id)}
+                      delay={index * 0.08}
+                      direction="up"
+                      duration={0.5}
+                      className={cardFlexBasis}
                     >
-                      {/* Thumbnail Container */}
-                      <div className="relative w-full pt-[56.25%] flex-shrink-0 bg-[#0a0a1a]">
-                        <picture>
-                          <source srcSet={`https://i.ytimg.com/vi_webp/${video.id}/hqdefault.webp`} type="image/webp" />
-                          <img
-                            src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
-                            alt={video.caption}
-                            loading="lazy"
-                            decoding="async"
-                            className="absolute top-0 left-0 w-full h-full object-cover"
-                          />
-                        </picture>
-                        {/* Play Button */}
-                        <button
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-red-600/85 rounded-2xl flex items-center justify-center z-[2] group-hover:scale-110 group-hover:bg-red-600 transition-all"
-                          aria-label="تشغيل الفيديو"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setModalVideoId(video.id);
-                          }}
-                        >
-                          <Play className="w-7 h-7 text-white fill-white ml-[-2px]" />
-                        </button>
-                      </div>
+                      <div
+                        className="rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover-lift-sm w-full"
+                        style={{ background: 'rgba(13,5,32,0.9)', border: '1px solid rgba(155,80,232,0.12)' }}
+                        onClick={() => {
+                          setIsExiting(false);
+                          setModalVideoId(video.id);
+                        }}
+                      >
+                        {/* Thumbnail Container */}
+                        <div className="relative w-full pt-[56.25%] flex-shrink-0 bg-[#0a0a1a]">
+                          <picture>
+                            <source srcSet={`https://i.ytimg.com/vi_webp/${video.id}/hqdefault.webp`} type="image/webp" />
+                            <img
+                              src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+                              alt={video.caption}
+                              loading="lazy"
+                              decoding="async"
+                              className="absolute top-0 left-0 w-full h-full object-cover"
+                            />
+                          </picture>
+                          {/* Play Button */}
+                          <button
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-red-600/85 rounded-2xl flex items-center justify-center z-[2] group-hover:scale-110 group-hover:bg-red-600 transition-all"
+                            aria-label="تشغيل الفيديو"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsExiting(false);
+                              setModalVideoId(video.id);
+                            }}
+                          >
+                            <Play className="w-7 h-7 text-white fill-white ml-[-2px]" />
+                          </button>
+                        </div>
 
-                      {/* Caption */}
-                      <div className="px-4 py-3.5 text-white text-sm font-bold leading-relaxed text-center flex-grow flex items-center justify-center" style={{ background: 'rgba(13,5,32,0.95)' }}>
-                        <span>
-                          {video.highlights.map((part, i) =>
-                            part.highlight ? (
-                              <span
-                                key={i}
-                                className="text-[#f5c542] font-black"
-                              >
-                                {part.text}
-                              </span>
-                            ) : (
-                              <span key={i}>{part.text}</span>
-                            )
-                          )}
-                        </span>
+                        {/* Caption */}
+                        <div className="px-4 py-3.5 text-white text-sm font-bold leading-relaxed text-center flex-grow flex items-center justify-center" style={{ background: 'rgba(13,5,32,0.95)' }}>
+                          <span>
+                            {video.highlights.map((part, i) =>
+                              part.highlight ? (
+                                <span
+                                  key={i}
+                                  className="text-[#f5c542] font-black"
+                                >
+                                  {part.text}
+                                </span>
+                              ) : (
+                                <span key={i}>{part.text}</span>
+                              )
+                            )}
+                          </span>
+                        </div>
                       </div>
-                    </motion.div>
+                    </FadeIn>
                   ))}
                 </div>
               </div>
@@ -276,8 +287,8 @@ const CaseStudySection = () => {
               {/* Next Button */}
               <button
                 onClick={goNext}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
-                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
+                className="cta-hover hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)' }}
                 aria-label="التالي"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -305,37 +316,31 @@ const CaseStudySection = () => {
       </section>
 
       {/* Video Modal */}
-      <AnimatePresence>
-        {modalVideoId && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[99999] flex items-center justify-center p-5 bg-black/92"
-            onClick={() => setModalVideoId(null)}
+      {modalVideoId && (
+        <div
+          className={`fixed inset-0 z-[99999] flex items-center justify-center p-5 bg-black/92 transition-opacity duration-300 ${isExiting ? "opacity-0" : "opacity-100"}`}
+          onClick={closeModal}
+        >
+          <div
+            className="relative w-full max-w-[900px] aspect-video rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="relative w-full max-w-[900px] aspect-video rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-              onClick={(e) => e.stopPropagation()}
+            <button
+              onClick={closeModal}
+              className="absolute -top-12 right-0 w-10 h-10 bg-white/15 border border-white/30 rounded-full text-white text-xl flex items-center justify-center hover:bg-white/30 transition-colors z-[2]"
+              aria-label="إغلاق"
             >
-              <button
-                onClick={() => setModalVideoId(null)}
-                className="absolute -top-12 right-0 w-10 h-10 bg-white/15 border border-white/30 rounded-full text-white text-xl flex items-center justify-center hover:bg-white/30 transition-colors z-[2]"
-                aria-label="إغلاق"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <iframe
-                src={`https://www.youtube.com/embed/${modalVideoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=1`}
-                className="w-full h-full border-none"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                allowFullScreen
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <X className="w-5 h-5" />
+            </button>
+            <iframe
+              src={`https://www.youtube.com/embed/${modalVideoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=1`}
+              className="w-full h-full border-none"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

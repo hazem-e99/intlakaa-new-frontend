@@ -12,7 +12,7 @@ type AdsRouteProps = {
 export default function AdsRoute({ seo, siteUrl }: AdsRouteProps) {
   const baseTitle = seo?.siteTitle || "انطلاقة";
   const description = "احجز استشارة مجانية مع انطلاقة واكتشف كيف نضاعف مبيعاتك بحملات تسويقية قائمة على البيانات.";
-  const image = seo?.ogImage || "/logo.png";
+  const image = seo?.ogImage || "/logo.webp";
 
   const webPageSchema = {
     "@context": "https://schema.org",

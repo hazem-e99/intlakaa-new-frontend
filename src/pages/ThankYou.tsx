@@ -1,17 +1,17 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  FaCheckCircle, 
-  FaWhatsapp, 
-  FaInstagram, 
+import {
+  FaCheckCircle,
+  FaWhatsapp,
+  FaInstagram,
   FaEnvelope,
   FaHome,
   FaRocket,
   FaStar
 } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
+import FadeIn from "@/components/FadeIn";
 
 const ThankYou = () => {
   const navigate = useNavigate();
@@ -67,36 +67,54 @@ const ThankYou = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      <style>{`
+        @keyframes thank-you-star {
+          0% { opacity: 0; transform: scale(0) translateY(0); }
+          20% { opacity: 1; transform: scale(1) translateY(-20px); }
+          70% { opacity: 1; transform: scale(1) translateY(-80px); }
+          100% { opacity: 0; transform: scale(0) translateY(-100px); }
+        }
+        @keyframes thank-you-confetti-fall {
+          from {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          to {
+            transform: translateY(110vh) rotate(var(--confetti-rotate-end, 360deg));
+            opacity: 0;
+          }
+        }
+        @keyframes thank-you-sparkle {
+          0%, 100% { transform: rotate(0deg); }
+          4% { transform: rotate(15deg); }
+          8% { transform: rotate(-15deg); }
+          12%, 99% { transform: rotate(0deg); }
+        }
+        .thank-you-sparkle-icon {
+          animation: thank-you-sparkle 2.5s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
         <div className="absolute top-20 -right-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-60" />
         <div className="absolute bottom-20 -left-40 w-96 h-96 bg-secondary/20 rounded-full blur-3xl opacity-60" />
-        
+
         {/* Floating Stars */}
         {[...Array(8)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute text-primary/30"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ 
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-              y: [0, -100],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: i * 0.5,
-              ease: "easeOut"
-            }}
             style={{
               left: `${10 + i * 12}%`,
               top: `${20 + (i % 3) * 20}%`,
+              animation: "thank-you-star 3s ease-out infinite",
+              animationDelay: `${i * 0.5}s`,
             }}
           >
             <FaStar size={20} />
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -104,24 +122,15 @@ const ThankYou = () => {
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {confettiParticles.map((particle) => (
-            <motion.div
+            <div
               key={particle.id}
               className="absolute w-3 h-3 rounded-full"
               style={{
                 backgroundColor: particle.color,
                 left: `${particle.left}%`,
                 top: "-5%",
-              }}
-              initial={{ y: 0, opacity: 1, rotate: 0 }}
-              animate={{
-                y: "110vh",
-                opacity: [1, 1, 0],
-                rotate: particle.rotation,
-              }}
-              transition={{
-                duration: particle.duration,
-                delay: particle.delay,
-                ease: "linear",
+                ["--confetti-rotate-end" as string]: `${particle.rotation}deg`,
+                animation: `thank-you-confetti-fall ${particle.duration}s linear ${particle.delay}s forwards`,
               }}
             />
           ))}
@@ -129,58 +138,43 @@ const ThankYou = () => {
       )}
 
       {/* Main Content */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+      <FadeIn
         className="relative z-10 max-w-2xl w-full"
+        direction="scale"
+        duration={0.6}
+        margin="0px"
       >
         <div className="bg-card/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-primary/20 overflow-hidden">
           {/* Header Section with Icon */}
           <div className="relative gradient-brand p-8 text-center">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ 
-                type: "spring",
-                stiffness: 200,
-                damping: 15,
-                delay: 0.2 
-              }}
+            <FadeIn
+              as="div"
               className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg mb-4"
+              delay={0.2}
+              direction="scale"
+              duration={0.55}
+              margin="0px"
             >
               <FaCheckCircle className="w-14 h-14 text-green-500" />
-            </motion.div>
+            </FadeIn>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
+            <FadeIn delay={0.4} margin="0px">
               <h1 className="text-4xl md:text-5xl font-black text-white mb-2 flex items-center justify-center gap-3">
                 تم الإرسال بنجاح!
-                <motion.div
-                  animate={{ rotate: [0, 15, -15, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
-                >
+                <span className="thank-you-sparkle-icon inline-flex">
                   <IoSparkles className="w-8 h-8" />
-                </motion.div>
+                </span>
               </h1>
               <p className="text-xl text-white/90">
                 استلمنا بياناتك وسنتواصل معك قريبًا
               </p>
-            </motion.div>
+            </FadeIn>
           </div>
 
           {/* Body Content */}
           <div className="p-8 md:p-12 space-y-8">
             {/* Success Message */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="text-center space-y-4"
-            >
+            <FadeIn className="text-center space-y-4" delay={0.6} margin="0px">
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-full px-6 py-3">
                 <FaRocket className="w-5 h-5 text-primary" />
                 <span className="font-bold text-lg">رحلة النجاح بدأت الآن</span>
@@ -189,111 +183,100 @@ const ThankYou = () => {
               <p className="text-lg text-muted-foreground leading-relaxed">
                 فريقنا سيتواصل معك خلال <span className="font-bold text-gradient">24 ساعة</span> لبدء خطة التسويق المخصصة لعلامتك التجارية
               </p>
-            </motion.div>
+            </FadeIn>
 
             {/* What's Next Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+            <FadeIn
               className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-6 space-y-4"
+              delay={0.8}
+              margin="0px"
             >
               <h3 className="text-xl font-bold text-center mb-4">وش اللي بعده؟</h3>
-              
+
               <div className="space-y-3">
                 {[
                   { step: "1", text: "مراجعة بياناتك وتحليل احتياجاتك" },
                   { step: "2", text: "إعداد خطة تسويقية مخصصة لك" },
                   { step: "3", text: "التواصل معك لمناقشة الخطة والبدء" },
                 ].map((item, index) => (
-                  <motion.div
+                  <FadeIn
                     key={item.step}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1 + index * 0.1 }}
                     className="flex items-center gap-4"
+                    delay={1 + index * 0.1}
+                    direction="right"
+                    margin="0px"
                   >
                     <div className="flex-shrink-0 w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white font-bold shadow-md">
                       {item.step}
                     </div>
                     <p className="text-base font-medium">{item.text}</p>
-                  </motion.div>
+                  </FadeIn>
                 ))}
               </div>
-            </motion.div>
+            </FadeIn>
 
             {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              className="space-y-4"
-            >
+            <FadeIn className="space-y-4" delay={1.2} margin="0px">
               <p className="text-center text-muted-foreground font-medium">
                 أو تواصل معنا مباشرة:
               </p>
-              
+
               <div className="grid grid-cols-3 gap-4">
                 {socialLinks.map((social, index) => (
-                  <motion.a
+                  <FadeIn
                     key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ 
-                      delay: 1.3 + index * 0.1,
-                      type: "spring",
-                      stiffness: 200 
-                    }}
-                    whileHover={{ scale: 1.1, y: -5 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`${social.bgColor} ${social.color} transition-all duration-300 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-lg border border-transparent hover:border-current group`}
+                    as="div"
+                    className="min-w-0"
+                    delay={1.3 + index * 0.1}
+                    direction="scale"
+                    margin="0px"
                   >
-                    <social.icon className="w-8 h-8 transition-transform group-hover:scale-110" />
-                    <span className="text-sm font-bold">{social.label}</span>
-                  </motion.a>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`cta-hover ${social.bgColor} ${social.color} transition-all duration-300 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-lg border border-transparent hover:border-current group w-full h-full`}
+                    >
+                      <social.icon className="w-8 h-8 transition-transform group-hover:scale-110" />
+                      <span className="text-sm font-bold">{social.label}</span>
+                    </a>
+                  </FadeIn>
                 ))}
               </div>
-            </motion.div>
+            </FadeIn>
 
             {/* Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5 }}
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-            >
+            <FadeIn className="flex flex-col sm:flex-row gap-4 pt-4" delay={1.5} margin="0px">
               <Button
                 onClick={() => navigate("/")}
-                className="flex-1 gradient-brand text-white px-8 py-6 rounded-full text-lg font-black shadow-lg hover:shadow-xl transition-all"
+                className="cta-hover flex-1 gradient-brand text-white px-8 py-6 rounded-full text-lg font-black shadow-lg hover:shadow-xl transition-all"
               >
                 <FaHome className="ml-2 w-5 h-5" />
                 العودة للرئيسية
               </Button>
-              
+
               <Button
                 onClick={() => navigate("/form")}
                 variant="outline"
-                className="flex-1 px-8 py-6 rounded-full text-lg font-bold border-2 hover:bg-primary/10 transition-all"
+                className="cta-hover flex-1 px-8 py-6 rounded-full text-lg font-bold border-2 hover:bg-primary/10 transition-all"
               >
                 إرسال طلب آخر
               </Button>
-            </motion.div>
+            </FadeIn>
 
             {/* Footer Note */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.8 }}
+            <FadeIn
+              as="p"
               className="text-center text-sm text-muted-foreground pt-4"
+              delay={1.8}
+              direction="none"
+              margin="0px"
             >
               شكرًا لثقتك في <span className="font-bold text-gradient">انطلاقة</span> 🚀
-            </motion.p>
+            </FadeIn>
           </div>
         </div>
-      </motion.div>
+      </FadeIn>
     </div>
   );
 };

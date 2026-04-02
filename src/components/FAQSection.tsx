@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, HelpCircle } from "lucide-react";
+import FadeIn from "@/components/FadeIn";
 
 const faqs = [
   { q: "كيف تختلف انطلاقة عن الوكالات الأخرى؟", a: "انطلاقة مو مجرد وكالة — نحن شريك نمو حقيقي. نشتغل مع عدد محدود جدًا من العملاء عشان نقدر نركّز على كل عميل بشكل كامل. فريقنا يضم أكثر من 25 خبير تسويق عالمي المستوى، وقد أدرنا مئات الملايين من المبيعات لعملائنا." },
@@ -13,11 +13,11 @@ const faqs = [
 
 function FAQItem({ q, a, index, isOpen, onToggle }: { q: string; a: string; index: number; isOpen: boolean; onToggle: () => void }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.06 }}
+    <FadeIn
+      direction="up"
+      delay={index * 0.06}
+      duration={0.5}
+      margin="-40px"
       className="rounded-2xl overflow-hidden transition-all duration-300"
       style={{
         background: isOpen ? "rgba(155,80,232,0.08)" : "rgba(21,11,46,0.5)",
@@ -31,15 +31,21 @@ function FAQItem({ q, a, index, isOpen, onToggle }: { q: string; a: string; inde
           {isOpen ? <Minus className="w-4 h-4" strokeWidth={2.5} /> : <Plus className="w-4 h-4" strokeWidth={2.5} />}
         </span>
       </button>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div id={`faq-answer-${index}`} initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }} role="region" aria-labelledby={`faq-${index}`}>
-            <div className="px-6 pb-6"><p className="text-white/60 leading-[2] text-base">{a}</p></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      <div
+        id={`faq-answer-${index}`}
+        role="region"
+        aria-labelledby={`faq-${index}`}
+        aria-hidden={!isOpen}
+        className={`grid ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+        style={{ transition: "grid-template-rows 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="px-6 pb-6">
+            <p className="text-white/60 leading-[2] text-base">{a}</p>
+          </div>
+        </div>
+      </div>
+    </FadeIn>
   );
 }
 
@@ -51,20 +57,29 @@ const FAQSection = () => {
         <div className="absolute -bottom-40 right-1/2 translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-[0.06]" style={{ background: "radial-gradient(circle, #9b50e8, transparent 70%)" }} />
       </div>
       <div className="container mx-auto relative z-10 max-w-4xl">
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, type: "spring" }}
-            className="inline-flex items-center gap-2 rounded-full px-6 py-2 mb-6" style={{ background: "rgba(155,80,232,0.1)", border: "1px solid rgba(155,80,232,0.2)" }}>
+        <FadeIn direction="up" duration={0.6} className="text-center mb-16">
+          <FadeIn
+            direction="scale"
+            duration={0.5}
+            className="inline-flex items-center gap-2 rounded-full px-6 py-2 mb-6"
+            style={{ background: "rgba(155,80,232,0.1)", border: "1px solid rgba(155,80,232,0.2)" }}
+          >
             <HelpCircle className="w-4 h-4" style={{ color: "#9b50e8" }} strokeWidth={2.5} />
             <span className="text-sm font-bold text-white/90">أسئلة شائعة</span>
-          </motion.div>
+          </FadeIn>
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-white leading-[1.4]">عندك سؤال؟ <span className="text-gradient">عندنا الجواب</span></h2>
           <p className="text-white/45 text-lg max-w-xl mx-auto">نجاوب على أكثر الأسئلة اللي يسألها العملاء قبل ما يبدأوا معنا</p>
-        </motion.div>
+        </FadeIn>
         <div className="space-y-4">
           {faqs.map((faq, i) => <FAQItem key={i} q={faq.q} a={faq.a} index={i} isOpen={openIndex === i} onToggle={() => setOpenIndex(openIndex === i ? null : i)} />)}
         </div>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-14 text-center p-8 rounded-3xl" style={{ background: "rgba(21,11,46,0.5)", border: "1px solid rgba(155,80,232,0.1)" }}>
+        <FadeIn
+          direction="up"
+          duration={0.6}
+          delay={0.3}
+          className="mt-14 text-center p-8 rounded-3xl"
+          style={{ background: "rgba(21,11,46,0.5)", border: "1px solid rgba(155,80,232,0.1)" }}
+        >
           <p className="text-white/65 text-lg mb-2 font-medium">ما لقيت إجابة سؤالك؟</p>
           <p className="text-white/40 text-sm mb-6">تواصل معنا مباشرةً وفريقنا جاهز للإجابة في أقرب وقت</p>
           <div className="flex flex-wrap gap-4 justify-center">
@@ -74,7 +89,7 @@ const FAQSection = () => {
             <a href="/form" className="px-7 py-3.5 rounded-full font-bold text-white text-sm transition-all hover:bg-white/8" style={{ border: "1px solid rgba(155,80,232,0.25)", background: "rgba(155,80,232,0.08)" }}>
               احجز استشارة مجانية</a>
           </div>
-        </motion.div>
+        </FadeIn>
       </div>
     </section>
   );

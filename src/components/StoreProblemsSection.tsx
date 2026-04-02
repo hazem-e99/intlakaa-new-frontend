@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { motion } from "framer-motion";
+import FadeIn from "@/components/FadeIn";
 import { AlertTriangle, Crosshair, ShoppingCart, BarChart3, Sparkles } from "lucide-react";
 
 const problems = [
@@ -49,13 +49,12 @@ function ProblemCard({
   index: number;
 }) {
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      whileHover={{ y: -4 }}
-      className="group relative overflow-hidden rounded-3xl p-5 sm:p-6"
+    <FadeIn
+      as="article"
+      direction="up"
+      duration={0.55}
+      delay={index * 0.08}
+      className="group relative overflow-hidden rounded-3xl p-5 sm:p-6 hover-lift-sm"
       style={{
         background: "linear-gradient(180deg, rgba(24,13,49,0.9) 0%, rgba(13,5,32,0.96) 100%)",
         border: `1px solid ${color}45`,
@@ -88,7 +87,7 @@ function ProblemCard({
         <h3 className="text-xl sm:text-2xl font-black text-white leading-[1.6] mb-3">{title}</h3>
         <p className="text-sm sm:text-base text-white/75 leading-[1.95]">{description}</p>
       </div>
-    </motion.article>
+    </FadeIn>
   );
 }
 
@@ -104,28 +103,18 @@ const StoreProblemsSection = () => {
             backgroundSize: "70px 70px",
           }}
         />
-        <motion.div
-          className="absolute top-[-14%] right-[-8%] w-[380px] h-[380px] sm:w-[520px] sm:h-[520px] rounded-full blur-[110px] opacity-30"
+        <div
+          className="blob-pulse-3 absolute top-[-14%] right-[-8%] w-[380px] h-[380px] sm:w-[520px] sm:h-[520px] rounded-full blur-[110px] opacity-30"
           style={{ background: "radial-gradient(circle, rgba(249,115,22,0.32), transparent 70%)" }}
-          animate={{ scale: [1, 1.08, 1], y: [0, -12, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div
-          className="absolute bottom-[-16%] left-[-6%] w-[340px] h-[340px] sm:w-[460px] sm:h-[460px] rounded-full blur-[100px] opacity-25"
+        <div
+          className="blob-pulse-2 absolute bottom-[-16%] left-[-6%] w-[340px] h-[340px] sm:w-[460px] sm:h-[460px] rounded-full blur-[100px] opacity-25"
           style={{ background: "radial-gradient(circle, rgba(96,165,250,0.35), transparent 70%)" }}
-          animate={{ scale: [1.05, 1, 1.05], x: [0, 14, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14"
-        >
+        <FadeIn direction="up" duration={0.6} margin="0px" className="text-center mb-10 md:mb-14">
           <div
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-5"
             style={{ background: "rgba(249,115,22,0.12)", border: "1px solid rgba(249,115,22,0.3)" }}
@@ -142,7 +131,7 @@ const StoreProblemsSection = () => {
           <p className="text-base sm:text-lg text-white/65 leading-relaxed max-w-3xl mx-auto">
             لو أي نقطة من القائمة هذه موجودة عندك، فالمشكلة غالبًا في الاستراتيجية والتنفيذ وليس في المنتج نفسه.
           </p>
-        </motion.div>
+        </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {problems.map((problem, index) => (

@@ -5,12 +5,11 @@ import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { pushGTMEvent } from "@/utils/gtm";
-import { DynamicTrackingScripts } from "@/components/seo/DynamicTrackingScripts";
 import "../src/index.css";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
@@ -22,9 +21,17 @@ const SonnerToaster = dynamic(() => import("@/components/ui/sonner").then((mod) 
   ssr: false,
 });
 
+const DynamicTrackingScripts = dynamic(
+  () => import("@/components/seo/DynamicTrackingScripts").then((mod) => mod.DynamicTrackingScripts),
+  {
+    ssr: false,
+  }
+);
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [enableToasters, setEnableToasters] = useState(false);
+  const [enableTrackingScripts, setEnableTrackingScripts] = useState(false);
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -58,6 +65,26 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
+    const enable = () => setEnableTrackingScripts(true);
+    const requestIdle = (window as any).requestIdleCallback as
+      | ((callback: IdleRequestCallback, options?: IdleRequestOptions) => number)
+      | undefined;
+    const cancelIdle = (window as any).cancelIdleCallback as ((id: number) => void) | undefined;
+
+    if (typeof requestIdle === "function") {
+      const id = requestIdle(enable, { timeout: 4500 });
+      return () => {
+        if (typeof cancelIdle === "function") {
+          cancelIdle(id);
+        }
+      };
+    }
+
+    const timeoutId = window.setTimeout(enable, 2200);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
     const shouldTrackPath = (path: string) => {
       return !path.startsWith("/admin") && !path.startsWith("/404");
     };
@@ -87,7 +114,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <div className={ibmPlexSansArabic.className}>
-        <DynamicTrackingScripts />
+        {enableTrackingScripts ? <DynamicTrackingScripts /> : null}
         {enableToasters ? (
           <>
             <Toaster />

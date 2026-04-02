@@ -7,7 +7,7 @@ import { fetchPages, Page } from "@/services/cmsService";
 import { Menu, X, Phone } from "lucide-react";
 
 const NAV_PAGES_CACHE_KEY = "nav-pages-cache-v1";
-const NAV_PAGES_CACHE_TTL = 5 * 60 * 1000;
+const NAV_PAGES_CACHE_TTL = 30 * 60 * 1000;
 
 type CachedNavPages = {
   timestamp: number;
@@ -129,9 +129,7 @@ const Navbar = () => {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 animate-nav-enter"
       style={{
-        background: isScrolled ? "rgba(13,5,32,0.92)" : "rgba(13,5,32,0.5)",
-        backdropFilter: "blur(24px) saturate(1.5)",
-        WebkitBackdropFilter: "blur(24px) saturate(1.5)",
+        background: isScrolled ? "rgba(13,5,32,0.97)" : "rgba(13,5,32,0.85)",
         borderBottom: `1px solid ${isScrolled ? "rgba(155,80,232,0.18)" : "rgba(255,255,255,0.04)"}`,
         boxShadow: isScrolled ? "0 8px 32px rgba(0,0,0,0.4)" : "none",
       }}

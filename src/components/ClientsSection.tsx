@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { memo, useState, useRef, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
 import { usePerPage } from "@/hooks/use-per-page";
+import FadeIn from "@/components/FadeIn";
 
 interface ClientVideo {
   id: number;
@@ -30,7 +30,7 @@ function VideoThumbnail({ src }: { src: string }) {
           observer.disconnect();
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "120px" }
     );
 
     observer.observe(node);
@@ -59,6 +59,7 @@ function VideoThumbnail({ src }: { src: string }) {
 const ClientsSection = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVideoSrc, setModalVideoSrc] = useState<string | null>(null);
+  const [isExiting, setIsExiting] = useState(false);
   const [cardWidth, setCardWidth] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const modalVideoRef = useRef<HTMLVideoElement>(null);
@@ -68,6 +69,15 @@ const ClientsSection = () => {
   // Touch swipe state
   const touchStartX = useRef(0);
   const touchDiffX = useRef(0);
+
+  const closeModal = useCallback(() => {
+    if (isExiting || !modalVideoSrc) return;
+    setIsExiting(true);
+    window.setTimeout(() => {
+      setModalVideoSrc(null);
+      setIsExiting(false);
+    }, 300);
+  }, [isExiting, modalVideoSrc]);
 
   const goNext = useCallback(() => {
     setCurrentPage((prev) => (prev + 1 >= totalPages ? 0 : prev + 1));
@@ -83,6 +93,8 @@ const ClientsSection = () => {
   }, [totalPages, currentPage]);
 
   useEffect(() => {
+    let rafId = 0;
+
     const updateCardWidth = () => {
       if (!trackRef.current || !trackRef.current.children[0]) return;
 
@@ -91,9 +103,22 @@ const ClientsSection = () => {
       setCardWidth(card.offsetWidth + gap);
     };
 
+    const scheduleWidthUpdate = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateCardWidth();
+      });
+    };
+
     updateCardWidth();
-    window.addEventListener("resize", updateCardWidth);
-    return () => window.removeEventListener("resize", updateCardWidth);
+    window.addEventListener("resize", scheduleWidthUpdate, { passive: true });
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener("resize", scheduleWidthUpdate);
+    };
   }, [perPage]);
 
   const translateX = currentPage * cardWidth * perPage;
@@ -101,11 +126,11 @@ const ClientsSection = () => {
   // Close modal on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setModalVideoSrc(null);
+      if (e.key === "Escape") closeModal();
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, []);
+  }, [closeModal]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -132,13 +157,7 @@ const ClientsSection = () => {
       <section className="section-py px-4 section-bg-elevated overflow-hidden" id="clients">
         <div className="container mx-auto">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
+          <FadeIn delay={0} direction="up" duration={0.6} className="text-center mb-12">
             <div className="w-[50px] h-[3px] rounded-full mx-auto mb-4" style={{ background: 'linear-gradient(to left, #9b50e8, #7c3aed)' }} />
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 leading-[1.5] max-w-4xl mx-auto text-white">
               آراء عملائنا
@@ -146,7 +165,7 @@ const ClientsSection = () => {
             <p className="text-sm text-white/50 max-w-xl mx-auto leading-relaxed">
               استمع إلى تجارب عملائنا الحقيقية مع خدماتنا
             </p>
-          </motion.div>
+          </FadeIn>
 
           {/* Carousel */}
           <div className="relative mt-6">
@@ -154,8 +173,8 @@ const ClientsSection = () => {
               {/* Prev Button */}
               <button
                 onClick={goPrev}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
-                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
+                className="cta-hover hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)' }}
                 aria-label="السابق"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -187,34 +206,41 @@ const ClientsSection = () => {
                   }}
                 >
                   {clientVideos.map((video, index) => (
-                    <motion.div
+                    <FadeIn
                       key={video.id}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.08 }}
-                      className={`${cardFlexBasis} rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group`}
-                      style={{ background: 'rgba(13,5,32,0.9)', border: '1px solid rgba(155,80,232,0.12)' }}
-                      onClick={() => setModalVideoSrc(video.src)}
+                      delay={index * 0.08}
+                      direction="up"
+                      duration={0.5}
+                      className={cardFlexBasis}
                     >
-                      {/* Video Thumbnail Container */}
-                      <div className="relative w-full pt-[56.25%] flex-shrink-0">
-                        <VideoThumbnail src={video.src} />
-                        {/* Dark overlay on hover */}
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-[1]" />
-                        {/* Play Button */}
-                        <button
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-red-600/85 rounded-2xl flex items-center justify-center z-[2] group-hover:scale-110 group-hover:bg-red-600 transition-all"
-                          aria-label="تشغيل الفيديو"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setModalVideoSrc(video.src);
-                          }}
-                        >
-                          <Play className="w-7 h-7 text-white fill-white ml-[-2px]" />
-                        </button>
+                      <div
+                        className="rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group hover-lift-sm w-full"
+                        style={{ background: 'rgba(13,5,32,0.9)', border: '1px solid rgba(155,80,232,0.12)' }}
+                        onClick={() => {
+                          setIsExiting(false);
+                          setModalVideoSrc(video.src);
+                        }}
+                      >
+                        {/* Video Thumbnail Container */}
+                        <div className="relative w-full pt-[56.25%] flex-shrink-0">
+                          <VideoThumbnail src={video.src} />
+                          {/* Dark overlay on hover */}
+                          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 z-[1]" />
+                          {/* Play Button */}
+                          <button
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-red-600/85 rounded-2xl flex items-center justify-center z-[2] group-hover:scale-110 group-hover:bg-red-600 transition-all"
+                            aria-label="تشغيل الفيديو"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsExiting(false);
+                              setModalVideoSrc(video.src);
+                            }}
+                          >
+                            <Play className="w-7 h-7 text-white fill-white ml-[-2px]" />
+                          </button>
+                        </div>
                       </div>
-                    </motion.div>
+                    </FadeIn>
                   ))}
                 </div>
               </div>
@@ -222,8 +248,8 @@ const ClientsSection = () => {
               {/* Next Button */}
               <button
                 onClick={goNext}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
-                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
+                className="cta-hover hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)' }}
                 aria-label="التالي"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -251,40 +277,34 @@ const ClientsSection = () => {
       </section>
 
       {/* Video Modal */}
-      <AnimatePresence>
-        {modalVideoSrc && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[99999] flex items-center justify-center p-5 bg-black/92"
-            onClick={() => setModalVideoSrc(null)}
+      {modalVideoSrc && (
+        <div
+          className={`fixed inset-0 z-[99999] flex items-center justify-center p-5 bg-black/92 transition-opacity duration-300 ${isExiting ? "opacity-0" : "opacity-100"}`}
+          onClick={closeModal}
+        >
+          <div
+            className="relative w-full max-w-[900px] aspect-video rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="relative w-full max-w-[900px] aspect-video rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-              onClick={(e) => e.stopPropagation()}
+            <button
+              onClick={closeModal}
+              className="absolute -top-12 right-0 w-10 h-10 bg-white/15 border border-white/30 rounded-full text-white text-xl flex items-center justify-center hover:bg-white/30 transition-colors z-[2]"
+              aria-label="إغلاق"
             >
-              <button
-                onClick={() => setModalVideoSrc(null)}
-                className="absolute -top-12 right-0 w-10 h-10 bg-white/15 border border-white/30 rounded-full text-white text-xl flex items-center justify-center hover:bg-white/30 transition-colors z-[2]"
-                aria-label="إغلاق"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <video
-                ref={modalVideoRef}
-                key={modalVideoSrc}
-                src={modalVideoSrc}
-                className="w-full h-full object-contain bg-black"
-                controls
-                autoPlay
-                playsInline
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <X className="w-5 h-5" />
+            </button>
+            <video
+              ref={modalVideoRef}
+              key={modalVideoSrc}
+              src={modalVideoSrc}
+              className="w-full h-full object-contain bg-black"
+              controls
+              autoPlay
+              playsInline
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -14,10 +14,9 @@ export default function FloatingWhatsAppButton() {
       <div
         className="group flex items-center gap-3 rounded-2xl px-3 py-2.5 md:px-4 md:py-3 transition-all hover:-translate-y-1 hover:scale-[1.01] active:scale-[0.98]"
         style={{
-          background: "rgba(12, 32, 22, 0.9)",
+          background: "rgba(12, 32, 22, 0.95)",
           border: "1px solid rgba(37, 211, 102, 0.55)",
           boxShadow: "0 0 24px rgba(37, 211, 102, 0.35), inset 0 0 16px rgba(37, 211, 102, 0.08)",
-          backdropFilter: "blur(10px)",
         }}
       >
         <div

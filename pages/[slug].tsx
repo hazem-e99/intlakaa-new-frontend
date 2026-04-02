@@ -25,7 +25,7 @@ type Params = {
 export default function DynamicRoute({ seo, siteUrl, page }: DynamicRouteProps) {
   const title = page.seoTitle || page.title;
   const description = page.seoDescription || seo?.metaDescription || page.title;
-  const image = seo?.ogImage || "/logo.png";
+  const image = seo?.ogImage || "/logo.webp";
 
   const webPageSchema = {
     "@context": "https://schema.org",

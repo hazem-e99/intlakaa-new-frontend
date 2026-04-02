@@ -38,7 +38,7 @@ const Index = () => {
     const cancelIdle = (window as any).cancelIdleCallback as ((id: number) => void) | undefined;
 
     if (typeof requestIdle === "function") {
-      const id = requestIdle(() => prefetchForm(), { timeout: 2000 });
+      const id = requestIdle(() => prefetchForm(), { timeout: 3500 });
       return () => {
         if (typeof cancelIdle === "function") {
           cancelIdle(id);
@@ -46,7 +46,7 @@ const Index = () => {
       };
     }
 
-    const timeoutId = setTimeout(() => prefetchForm(), 1500);
+    const timeoutId = setTimeout(() => prefetchForm(), 2500);
     return () => clearTimeout(timeoutId);
   }, []);
 
@@ -68,7 +68,7 @@ const Index = () => {
       <LazySection
         component={PlatformsSection}
         fallback={<SectionSkeleton minHeight={340} />}
-        rootMargin="420px 0px"
+        rootMargin="220px 0px"
       />
 
       {/* 5. Results – hard numbers build trust */}
@@ -123,7 +123,7 @@ const Index = () => {
       <LazySection
         component={Footer}
         fallback={<SectionSkeleton minHeight={260} />}
-        rootMargin="300px 0px"
+        rootMargin="180px 0px"
       />
 
       {/* Floating WhatsApp CTA */}

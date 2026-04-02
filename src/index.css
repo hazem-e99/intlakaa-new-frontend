@@ -11,6 +11,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.grid-rows-\[0fr\] {
+  grid-template-rows: 0fr;
+}
+.grid-rows-\[1fr\] {
+  grid-template-rows: 1fr;
+}
+
 /* ── Web Fonts ───────────────────────────────────────────── */
 /* Imports moved to the top to fix Vite build error */
 
@@ -105,7 +112,6 @@
 
   html {
     direction: rtl;
-    scroll-behavior: smooth;
     overflow-x: clip;
   }
 
@@ -242,6 +248,12 @@
     animation: nav-enter 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Hero animations - split for LCP optimization */
+  .hero-visible {
+    /* No opacity animation - visible immediately for LCP */
+    animation: none;
+  }
+
   .hero-fade-up {
     opacity: 0;
     transform: translateY(16px);
@@ -251,26 +263,19 @@
   .hero-orb {
     filter: blur(1px);
     animation: hero-orb 5.8s ease-in-out infinite;
-    will-change: transform, opacity;
   }
 
   .hero-glow-breath {
     animation: hero-glow-breath 8.5s ease-in-out infinite;
-    will-change: transform, opacity;
   }
 
   .hero-image-float {
     animation: hero-image-float 5.4s ease-in-out infinite;
-    will-change: transform;
   }
 
   .hero-image-reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    animation:
-      hero-fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
-      hero-image-float 5.4s ease-in-out 620ms infinite;
-    will-change: transform, opacity;
+    /* Start visible for LCP - no opacity animation */
+    animation: hero-image-float 5.4s ease-in-out infinite;
   }
 
   .animate-whatsapp-enter {
@@ -292,6 +297,53 @@
   .video-card > *:not(video) { z-index: 10; }
 
   .form-input::placeholder { text-align: right !important; }
+
+  /* ── Background blob pulse (replaces framer-motion infinite blobs) ── */
+  .blob-pulse-1 {
+    animation: blob-pulse-1 13s ease-in-out infinite;
+  }
+  .blob-pulse-2 {
+    animation: blob-pulse-2 14s ease-in-out infinite;
+  }
+  .blob-pulse-3 {
+    animation: blob-pulse-3 11s ease-in-out infinite;
+  }
+  .blob-pulse-slow {
+    animation: blob-pulse-1 18s ease-in-out infinite;
+  }
+
+  /* ── Marquee ── */
+  .marquee-track {
+    animation: marquee-scroll 45s linear infinite;
+  }
+
+  /* ── Sparkle spin ── */
+  .spin-slow { animation: spin-slow 4s linear infinite; }
+
+  /* ── Hover lift (replaces framer-motion whileHover) ── */
+  .hover-lift {
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-6px) scale(1.015);
+  }
+  .hover-lift-sm {
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  }
+  .hover-lift-sm:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ── CTA button hover (replaces framer-motion whileHover/whileTap) ── */
+  .cta-hover {
+    transition: transform 0.2s ease-out;
+  }
+  .cta-hover:hover {
+    transform: scale(1.05) translateY(-3px);
+  }
+  .cta-hover:active {
+    transform: scale(0.97);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -364,6 +416,27 @@
   }
 }
 
+@keyframes blob-pulse-1 {
+  0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+  50%      { transform: scale(1.15) translate(-18px, 10px); opacity: 0.8; }
+}
+@keyframes blob-pulse-2 {
+  0%, 100% { transform: scale(1.05) translate(0, 0); }
+  50%      { transform: scale(1) translate(14px, 0); }
+}
+@keyframes blob-pulse-3 {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50%      { transform: scale(1.08) translate(0, -12px); }
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 /* ═══════════════════════════════════════════════════════════
    SECTION BACKGROUND SYSTEM
    Consistent dark gradient palette for all sections
@@ -429,3 +502,37 @@
 .quill-content .ql-size-huge     { font-size: 2.5em; }
 .quill-content .ql-direction-rtl { direction: rtl; text-align: inherit; }
 .quill-content .ql-direction-ltr { direction: ltr; text-align: inherit; }
+
+@media (max-width: 768px) {
+  .hero-orb,
+  .hero-glow-breath,
+  .blob-pulse-1,
+  .blob-pulse-2,
+  .blob-pulse-3,
+  .blob-pulse-slow,
+  .marquee-track,
+  .spin-slow {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up,
+  .hero-orb,
+  .hero-glow-breath,
+  .hero-image-float,
+  .hero-image-reveal,
+  .animate-whatsapp-enter,
+  .blob-pulse-1,
+  .blob-pulse-2,
+  .blob-pulse-3,
+  .blob-pulse-slow,
+  .marquee-track,
+  .spin-slow,
+  .animate-float,
+  .animate-shimmer,
+  .animate-glow-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}

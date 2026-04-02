@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
 import { memo } from "react";
+import Image from "next/image";
+import FadeIn from "@/components/FadeIn";
 
 const optimizeCloudinaryImage = (url: string) => {
   if (!url.includes("res.cloudinary.com")) return url;
@@ -31,37 +32,24 @@ const customerLogos = [
   "https://res.cloudinary.com/dvgi2kkpy/image/upload/v1773183779/l2_rpxeyy.png",
 ].map((src, i) => ({ id: i + 1, src: optimizeCloudinaryImage(src), alt: `عميل ${i + 1}` }));
 
-const duplicatedLogos = [...customerLogos, ...customerLogos];
+const duplicatedLogos = [...customerLogos, ...customerLogos.slice(0, Math.ceil(customerLogos.length * 0.6))];
 
 const CustomersLogosSection = () => (
   <section className="section-py-sm px-4 overflow-hidden section-bg-base">
     <div className="container mx-auto">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-12"
-      >
+      <FadeIn direction="up" duration={0.6} className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-black text-white mb-2 leading-[1.5]">
           نفتخر بثقة أكثر من <span className="text-gradient">علامة تجارية</span>
         </h2>
         <p className="text-white/40 text-sm">عملاء يثقون بنا لتحقيق نموهم الرقمي</p>
-      </motion.div>
+      </FadeIn>
 
-      {/* Marquee */}
       <div className="relative">
-        {/* Fade edges — dark to match #0d0520 */}
         <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, #0d0520, transparent)" }} />
         <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, #0d0520, transparent)" }} />
 
         <div className="overflow-hidden" dir="ltr">
-          <motion.div
-            className="flex gap-6 items-center py-4 w-max"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ x: { repeat: Infinity, repeatType: "loop", duration: 45, ease: "linear" } }}
-          >
+          <div className="marquee-track flex gap-6 items-center py-4 w-max">
             {duplicatedLogos.map((logo, index) => (
               <div key={`${logo.id}-${index}`} className="flex-shrink-0 group">
                 <div
@@ -71,21 +59,22 @@ const CustomersLogosSection = () => (
                     border: "1px solid rgba(155,80,232,0.12)",
                   }}
                 >
-                  <img
+                  <Image
                     src={logo.src}
                     alt={logo.alt}
                     width={176}
                     height={112}
+                    sizes="(max-width: 768px) 144px, 176px"
                     loading="lazy"
                     decoding="async"
+                    quality={70}
                     className="max-w-full max-h-full object-contain transition-all duration-500"
                   />
-                  {/* Hover glow */}
                   <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ background: "radial-gradient(circle, rgba(155,80,232,0.08), transparent 70%)" }} />
                 </div>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

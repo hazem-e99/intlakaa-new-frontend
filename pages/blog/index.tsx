@@ -41,7 +41,7 @@ export default function BlogIndexRoute({ seo, siteUrl, initialPosts }: BlogIndex
         description="أحدث المقالات والرؤى في عالم التسويق والنمو من فريق انطلاقة."
         keywords={seo?.keywords}
         canonicalPath="/blog"
-        image={seo?.ogImage || "/logo.png"}
+        image={seo?.ogImage || "/logo.webp"}
         type="website"
         structuredData={[blogSchema, itemListSchema]}
       />

@@ -19,7 +19,7 @@ export default function BlogPostRoute({ seo, siteUrl, post }: BlogPostRouteProps
   const title = post.seoTitle || post.title;
   const description =
     post.seoDescription || post.excerpt || seo?.metaDescription || "مقال من مدونة انطلاقة";
-  const image = post.coverImage || seo?.ogImage || "/logo.png";
+  const image = post.coverImage || seo?.ogImage || "/logo.webp";
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -39,7 +39,7 @@ export default function BlogPostRoute({ seo, siteUrl, post }: BlogPostRouteProps
       name: "انطلاقة",
       logo: {
         "@type": "ImageObject",
-        url: toAbsoluteUrl(siteUrl, "/logo.png"),
+        url: toAbsoluteUrl(siteUrl, "/logo.webp"),
       },
     },
     mainEntityOfPage: `${siteUrl}/blog/${post.slug}`,

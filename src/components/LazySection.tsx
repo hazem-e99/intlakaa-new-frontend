@@ -19,7 +19,7 @@ interface LazySectionProps {
 const LazySection = ({
   component: Component,
   fallback,
-  rootMargin = "380px 0px",
+  rootMargin = "180px 0px",
   className,
 }: LazySectionProps) => {
   const [shouldRender, setShouldRender] = useState(false);

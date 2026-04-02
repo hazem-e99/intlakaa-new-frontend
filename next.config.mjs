@@ -36,8 +36,6 @@ const nextConfig = {
       "react-icons/si",
       "react-icons/md",
       "react-icons/io5",
-      "framer-motion",
-      "recharts",
       "date-fns",
       "@radix-ui/react-accordion",
       "@radix-ui/react-dialog",
@@ -63,6 +61,18 @@ const nextConfig = {
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
+      },
+      {
+        source: "/api/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
+      {
+        source: "/",
+        headers: [{ key: "Cache-Control", value: "public, max-age=300, must-revalidate" }],
+      },
+      {
+        source: "/((?!_next|api|.*\\..*).*)",
+        headers: [{ key: "Cache-Control", value: "public, max-age=300, must-revalidate" }],
       },
     ];
   },

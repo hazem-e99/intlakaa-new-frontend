@@ -10,13 +10,8 @@ function StatNumber({ target, suffix = "", prefix = "" }: { target: number; suff
 }
 
 const ORBS = [
-  { x: 8, y: 18, delay: "0s", size: 14, color: "rgba(155,80,232,0.55)" },
   { x: 22, y: 64, delay: "0.8s", size: 10, color: "rgba(192,132,252,0.45)" },
-  { x: 38, y: 22, delay: "1.4s", size: 12, color: "rgba(96,165,250,0.35)" },
-  { x: 54, y: 70, delay: "0.5s", size: 9, color: "rgba(155,80,232,0.45)" },
-  { x: 74, y: 30, delay: "1.8s", size: 11, color: "rgba(192,132,252,0.4)" },
-  { x: 88, y: 56, delay: "1.1s", size: 13, color: "rgba(96,165,250,0.32)" },
-  { x: 16, y: 84, delay: "2.1s", size: 8, color: "rgba(155,80,232,0.38)" },
+  { x: 74, y: 30, delay: "1.8s", size: 11, color: "rgba(155,80,232,0.45)" },
   { x: 66, y: 86, delay: "2.8s", size: 10, color: "rgba(192,132,252,0.32)" },
 ];
 
@@ -31,7 +26,7 @@ const stats = [
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-32 md:pt-40 pb-16 px-4 overflow-hidden">
-      <div className="absolute inset-0 z-0 will-change-transform" style={{ transform: "translateZ(0)" }}>
+      <div className="absolute inset-0 z-0" style={{ transform: "translateZ(0)" }}>
         <div className="absolute inset-0" style={{ background: "linear-gradient(170deg, #0d0520 0%, #1a0a34 40%, #130828 70%, #0d0520 100%)" }} />
 
         {/* Radial glow: primary */}
@@ -45,17 +40,6 @@ const HeroSection = () => {
           className="absolute bottom-[-8%] left-[-8%] w-[500px] h-[500px] rounded-full"
           style={{ background: "radial-gradient(circle, rgba(155,80,232,0.12) 0%, transparent 70%)" }}
           aria-hidden="true"
-        />
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(155,80,232,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(155,80,232,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: "80px 80px",
-          }}
         />
         {/* Floating orbs */}
         {ORBS.map((orb, index) => (
@@ -83,11 +67,10 @@ const HeroSection = () => {
           <div className="text-center lg:text-right space-y-8 order-1">
             {/* Trust badge */}
             <div
-              className="inline-flex items-center justify-center gap-3 rounded-full px-5 py-2.5 mx-auto lg:mx-0 hero-fade-up"
+              className="inline-flex items-center justify-center gap-3 rounded-full px-5 py-2.5 mx-auto lg:mx-0 hero-visible"
               style={{
                 background: "rgba(155,80,232,0.12)",
                 border: "1px solid rgba(155,80,232,0.25)",
-                animationDelay: "100ms",
               }}
             >
               <span className="relative flex h-2.5 w-2.5">
@@ -98,7 +81,7 @@ const HeroSection = () => {
             </div>
 
             {/* Headline */}
-            <div className="hero-fade-up" style={{ animationDelay: "180ms" }}>
+            <div className="hero-visible">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.32] sm:leading-[1.4] md:leading-[1.6] text-white">
                 <span className="block mb-2 sm:mb-3 md:mb-5">بنساعدك تخلي</span>
                 <span className="block">
@@ -112,8 +95,7 @@ const HeroSection = () => {
 
             {/* Subheading */}
             <p
-              className="text-lg md:text-xl text-white/70 leading-[2] font-medium max-w-xl mx-auto lg:mr-auto lg:ml-0 hero-fade-up"
-              style={{ animationDelay: "280ms" }}
+              className="text-lg md:text-xl text-white/70 leading-[2] font-medium max-w-xl mx-auto lg:mr-auto lg:ml-0 hero-visible"
             >
               بخطط تسويقية قائمة على النتائج، واستراتيجيات مصممة لعلامتك التجارية — نوصلك لأفضل عائد بأقل مجهود.
             </p>
@@ -192,8 +174,8 @@ const HeroSection = () => {
                 fetchPriority="high"
                 width={2000}
                 height={1333}
-                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 60vw, 50vw"
-                quality={75}
+                sizes="(max-width: 768px) 88vw, (max-width: 1200px) 56vw, 46vw"
+                quality={68}
                 className="w-full h-auto object-contain"
               />
             </div>
@@ -205,7 +187,6 @@ const HeroSection = () => {
                 animationDelay: "560ms",
                 background: "rgba(13,5,32,0.9)",
                 border: "1px solid rgba(155,80,232,0.3)",
-                backdropFilter: "blur(16px)",
               }}
             >
               <div className="text-[10px] md:text-xs text-white/50 font-medium">رضا العملاء</div>
@@ -214,7 +195,7 @@ const HeroSection = () => {
 
             <div
               className="absolute top-4 left-0 md:top-8 md:-left-8 rounded-xl md:rounded-2xl px-3 py-2 md:px-5 md:py-3 z-20 hero-fade-up"
-              style={{ background: "rgba(13,5,32,0.9)", border: "1px solid rgba(155,80,232,0.3)", backdropFilter: "blur(16px)" }}
+              style={{ background: "rgba(13,5,32,0.95)", border: "1px solid rgba(155,80,232,0.3)" }}
             >
               <div className="text-[10px] md:text-xs text-white/50 font-medium">نمو المبيعات</div>
               <div className="text-base md:text-lg font-black text-amber-400">+340%</div>

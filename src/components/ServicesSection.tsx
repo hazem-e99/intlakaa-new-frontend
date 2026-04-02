@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
 import { memo } from "react";
 import { Megaphone, BarChart3, MessageCircle, Search, ArrowLeft, CheckCircle2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import FadeIn from "@/components/FadeIn";
 import prefetchForm from "@/lib/prefetchForm";
 import { pushGTMEvent } from "@/utils/gtm";
 
@@ -71,13 +71,12 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   const Icon = service.icon;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      whileHover={{ y: -5 }}
-      className="relative rounded-3xl p-6 sm:p-7 overflow-hidden group"
+    <FadeIn
+      direction="up"
+      duration={0.55}
+      delay={index * 0.08}
+      margin="-50px"
+      className="relative rounded-3xl p-6 sm:p-7 overflow-hidden group hover-lift-sm"
       style={{
         background: "linear-gradient(180deg, rgba(24,13,49,0.95) 0%, rgba(13,5,32,0.98) 100%)",
         border: "1px solid rgba(155,80,232,0.2)",
@@ -114,12 +113,13 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 
         <ul className="space-y-3 mt-1">
           {service.items.map((item, i) => (
-            <motion.li
+            <FadeIn
               key={i}
-              initial={{ opacity: 0, x: 12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 + i * 0.04 }}
+              as="li"
+              direction="left"
+              duration={0.45}
+              delay={index * 0.08 + i * 0.04}
+              margin="0px"
               className="flex items-start gap-3 text-white/75 group-hover:text-white/90 transition-colors text-sm sm:text-[0.95rem] font-medium leading-relaxed"
             >
               <div
@@ -129,11 +129,11 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                 <CheckCircle2 className="w-3.5 h-3.5" style={{ color: service.color }} strokeWidth={2.4} />
               </div>
               <span>{item}</span>
-            </motion.li>
+            </FadeIn>
           ))}
         </ul>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 }
 
@@ -147,28 +147,18 @@ const ServicesSection = () => (
           backgroundSize: "60px 60px",
         }}
       />
-      <motion.div
-        className="absolute top-[-18%] right-[-8%] w-[420px] h-[420px] sm:w-[560px] sm:h-[560px] rounded-full blur-[120px] opacity-25"
+      <div
+        className="blob-pulse-1 absolute top-[-18%] right-[-8%] w-[420px] h-[420px] sm:w-[560px] sm:h-[560px] rounded-full blur-[120px] opacity-25"
         style={{ background: "radial-gradient(circle, rgba(155,80,232,0.35), transparent 70%)" }}
-        animate={{ scale: [1, 1.1, 1], x: [0, -18, 0], y: [0, 10, 0] }}
-        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.div
-        className="absolute bottom-[-12%] left-[-7%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] rounded-full blur-[100px] opacity-20"
+      <div
+        className="blob-pulse-2 absolute bottom-[-12%] left-[-7%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] rounded-full blur-[100px] opacity-20"
         style={{ background: "radial-gradient(circle, rgba(96,165,250,0.25), transparent 70%)" }}
-        animate={{ scale: [1.05, 1, 1.05], x: [0, 14, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
 
     <div className="container mx-auto relative z-10 max-w-7xl">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-10 md:mb-14 text-center"
-      >
+      <FadeIn direction="up" duration={0.6} className="mb-10 md:mb-14 text-center">
         <div
           className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-5"
           style={{ background: "rgba(155,80,232,0.14)", border: "1px solid rgba(155,80,232,0.28)" }}
@@ -185,15 +175,9 @@ const ServicesSection = () => (
         <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">
           نماذج خدمة مصممة لتناسب مرحلتك الحالية وتدفعك للنمو بخطة واضحة، تنفيذ احترافي، وتحسين مستمر مبني على النتائج.
         </p>
-      </motion.div>
+      </FadeIn>
 
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mb-8 md:mb-10"
-      >
+      <FadeIn direction="up" duration={0.5} delay={0.1} className="mb-8 md:mb-10">
         <div className="flex flex-wrap justify-center gap-3">
           {highlights.map((item, i) => (
             <div
@@ -206,19 +190,13 @@ const ServicesSection = () => (
             </div>
           ))}
         </div>
-      </motion.div>
+      </FadeIn>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-7 max-w-6xl mx-auto">
         {services.map((s, i) => <ServiceCard key={s.number} service={s} index={i} />)}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 22 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55, delay: 0.2 }}
-        className="mt-10 md:mt-14"
-      >
+      <FadeIn direction="up" duration={0.55} delay={0.2} className="mt-10 md:mt-14">
         <div
           className="relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-10"
           style={{ background: "rgba(21,11,46,0.78)", border: "1px solid rgba(155,80,232,0.22)" }}
@@ -237,11 +215,10 @@ const ServicesSection = () => (
 
             <div className="text-center md:text-left">
               <Link to="/form" onMouseEnter={prefetchForm} className="inline-block">
-                <motion.button
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
+                <button
+                  type="button"
                   onClick={() => pushGTMEvent("cta_click", { button_name: "استشارة مجانية", location: "services_section" })}
-                  className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-base sm:text-lg font-black text-white overflow-hidden"
+                  className="cta-hover group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-base sm:text-lg font-black text-white overflow-hidden"
                   style={{ background: "linear-gradient(135deg, #7c3aed, #9b50e8)", boxShadow: "0 12px 34px rgba(124,58,237,0.35)" }}
                 >
                   <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%]" />
@@ -249,12 +226,12 @@ const ServicesSection = () => (
                     احجز استشارة مجانية
                     <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                   </span>
-                </motion.button>
+                </button>
               </Link>
             </div>
           </div>
         </div>
-      </motion.div>
+      </FadeIn>
     </div>
   </section>
 );

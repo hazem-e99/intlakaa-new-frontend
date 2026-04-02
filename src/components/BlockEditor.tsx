@@ -1,7 +1,11 @@
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-// @ts-ignore
-import ReactQuill from 'react-quill';
+import dynamic from 'next/dynamic';
+
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => <div className="h-[200px] bg-muted/30 rounded animate-pulse" />,
+});
 import 'react-quill/dist/quill.snow.css';
 import { Block, BlockType } from '@/services/cmsService';
 import { Button } from '@/components/ui/button';

@@ -14,7 +14,7 @@ type SeoPayload = {
 };
 
 const CACHE_KEY = "seo-tracking-cache-v1";
-const CACHE_TTL = 10 * 60 * 1000;
+const CACHE_TTL = 30 * 60 * 1000;
 
 const getBackendOrigin = () => {
   const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -64,12 +64,62 @@ const readEnvDefaults = (): TrackingIds => ({
 export function DynamicTrackingScripts() {
   const router = useRouter();
   const [ids, setIds] = useState<TrackingIds>(readEnvDefaults());
+  const [shouldInjectScripts, setShouldInjectScripts] = useState(false);
+  const [shouldLoadExtendedPixels, setShouldLoadExtendedPixels] = useState(false);
   const disableTracking = router.pathname.startsWith("/admin") || router.pathname === "/404";
 
   useEffect(() => {
     if (disableTracking) {
       return;
     }
+
+    const activate = () => setShouldLoadExtendedPixels(true);
+    const timeoutId = window.setTimeout(activate, 12000);
+
+    window.addEventListener("scroll", activate, { once: true, passive: true });
+    window.addEventListener("pointerdown", activate, { once: true, passive: true });
+    window.addEventListener("keydown", activate, { once: true });
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.removeEventListener("scroll", activate);
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("keydown", activate);
+    };
+  }, [disableTracking]);
+
+  useEffect(() => {
+    if (disableTracking) {
+      return;
+    }
+
+    let cancelled = false;
+    let injectTimeoutId = 0;
+    let fetchTimeoutId = 0;
+    let injectIdleId: number | null = null;
+    let fetchIdleId: number | null = null;
+
+    const requestIdle = (window as any).requestIdleCallback as
+      | ((callback: IdleRequestCallback, options?: IdleRequestOptions) => number)
+      | undefined;
+    const cancelIdle = (window as any).cancelIdleCallback as ((id: number) => void) | undefined;
+
+    const scheduleInjection = () => {
+      const inject = () => {
+        if (!cancelled) {
+          setShouldInjectScripts(true);
+        }
+      };
+
+      if (typeof requestIdle === "function") {
+        injectIdleId = requestIdle(inject, { timeout: 4500 });
+        return;
+      }
+
+      injectTimeoutId = window.setTimeout(inject, 2200);
+    };
+
+    scheduleInjection();
 
     const cached = readCache();
 
@@ -78,10 +128,15 @@ export function DynamicTrackingScripts() {
     }
 
     if (cached.fresh) {
-      return;
+      return () => {
+        cancelled = true;
+        window.clearTimeout(injectTimeoutId);
+        if (typeof cancelIdle === "function" && injectIdleId !== null) {
+          cancelIdle(injectIdleId);
+        }
+      };
     }
 
-    let cancelled = false;
     const controller = new AbortController();
 
     const fetchSeo = async () => {
@@ -111,31 +166,34 @@ export function DynamicTrackingScripts() {
       }
     };
 
-    const requestIdle = (window as any).requestIdleCallback as
-      | ((callback: IdleRequestCallback, options?: IdleRequestOptions) => number)
-      | undefined;
-    const cancelIdle = (window as any).cancelIdleCallback as ((id: number) => void) | undefined;
-
     if (typeof requestIdle === "function") {
-      const idleId = requestIdle(fetchSeo, { timeout: 3000 });
+      fetchIdleId = requestIdle(fetchSeo, { timeout: 5000 });
       return () => {
         cancelled = true;
         controller.abort();
+        window.clearTimeout(injectTimeoutId);
+        window.clearTimeout(fetchTimeoutId);
         if (typeof cancelIdle === "function") {
-          cancelIdle(idleId);
+          if (injectIdleId !== null) {
+            cancelIdle(injectIdleId);
+          }
+          if (fetchIdleId !== null) {
+            cancelIdle(fetchIdleId);
+          }
         }
       };
     }
 
-    const timeoutId = window.setTimeout(fetchSeo, 1200);
+    fetchTimeoutId = window.setTimeout(fetchSeo, 3200);
     return () => {
       cancelled = true;
       controller.abort();
-      window.clearTimeout(timeoutId);
+      window.clearTimeout(injectTimeoutId);
+      window.clearTimeout(fetchTimeoutId);
     };
   }, [disableTracking]);
 
-  if (disableTracking) {
+  if (disableTracking || !shouldInjectScripts) {
     return null;
   }
 
@@ -151,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </Script>
       ) : null}
 
-      {ids.gaId ? (
+      {ids.gaId && !ids.gtmId ? (
         <>
           <Script
             id="ga-loader"
@@ -167,7 +225,7 @@ gtag('config', '${ids.gaId}');`}
         </>
       ) : null}
 
-      {ids.fbPixel ? (
+      {shouldLoadExtendedPixels && ids.fbPixel ? (
         <Script id="facebook-pixel" strategy="lazyOnload">
           {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -179,7 +237,7 @@ fbq('track', 'PageView');`}
         </Script>
       ) : null}
 
-      {ids.tiktokPixel ? (
+      {shouldLoadExtendedPixels && ids.tiktokPixel ? (
         <Script id="tiktok-pixel" strategy="lazyOnload">
           {`!function (w, d, t) {
 w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowRight } from "lucide-react";
 import { createRequest } from "@/services/requestsService";
 import { pushGTMEvent } from "@/utils/gtm";
+import FadeIn from "@/components/FadeIn";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -107,11 +107,7 @@ const Form = () => {
   return (
     <div className="min-h-screen bg-background py-20 px-4">
       <div className="w-full md:container md:mx-auto md:max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <FadeIn duration={0.6} direction="up" margin="0px">
           <Button
             variant="ghost"
             onClick={() => navigate("/")}
@@ -181,23 +177,19 @@ const Form = () => {
                   />
                 </div>
 
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="pt-2"
-                >
+                <div className="pt-2">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full gradient-brand text-white py-5 text-lg font-bold shadow-medium hover:shadow-lg transition-all"
+                    className="cta-hover w-full gradient-brand text-white py-5 text-lg font-bold shadow-medium hover:shadow-lg transition-all"
                   >
                     {isSubmitting ? "جاري الإرسال..." : "إرسال النموذج"}
                   </Button>
-                </motion.div>
+                </div>
               </form>
             </div>
           </div>
-        </motion.div>
+        </FadeIn>
       </div>
     </div>
   );

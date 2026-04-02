@@ -20,7 +20,7 @@ export default function HomeRoute({ seo, siteUrl }: HomeRouteProps) {
     "@type": "Organization",
     name: "انطلاقة",
     url: siteUrl,
-    logo: toAbsoluteUrl(siteUrl, seo?.ogImage || "/logo.png"),
+    logo: toAbsoluteUrl(siteUrl, seo?.ogImage || "/logo.webp"),
     sameAs: (seo?.socialLinks || []).map((item) => item.url).filter(Boolean),
   };
 
@@ -40,7 +40,7 @@ export default function HomeRoute({ seo, siteUrl }: HomeRouteProps) {
         description={description}
         keywords={seo?.keywords}
         canonicalPath="/"
-        image={seo?.ogImage || "/logo.png"}
+        image={seo?.ogImage || "/logo.webp"}
         type="website"
         structuredData={[organizationSchema, websiteSchema]}
       />

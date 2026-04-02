@@ -12,7 +12,7 @@ type FormRouteProps = {
 export default function FormRoute({ seo, siteUrl }: FormRouteProps) {
   const baseTitle = seo?.siteTitle || "انطلاقة";
   const description = "احجز استشارة تسويقية مجانية مع فريق انطلاقة واحصل على خطة نمو مخصصة لمشروعك.";
-  const image = seo?.ogImage || "/logo.png";
+  const image = seo?.ogImage || "/logo.webp";
 
   const webPageSchema = {
     "@context": "https://schema.org",

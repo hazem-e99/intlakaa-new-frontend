@@ -19,7 +19,7 @@ export default function ThankYouRoute({ seo, siteUrl }: ThankYouRouteProps) {
         title={`شكرا لتواصلك معنا | ${baseTitle}`}
         description="تم استلام طلبك بنجاح. سيتواصل معك فريق انطلاقة في أقرب وقت."
         canonicalPath="/thank-you"
-        image={seo?.ogImage || "/logo.png"}
+        image={seo?.ogImage || "/logo.webp"}
         noIndex
       />
       <ThankYouPage />
