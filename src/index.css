@@ -504,15 +504,31 @@
 .quill-content .ql-direction-ltr { direction: ltr; text-align: inherit; }
 
 @media (max-width: 768px) {
+  .hero-fade-up,
   .hero-orb,
   .hero-glow-breath,
+  .hero-image-float,
+  .hero-image-reveal,
+  .animate-whatsapp-enter,
   .blob-pulse-1,
   .blob-pulse-2,
   .blob-pulse-3,
   .blob-pulse-slow,
   .marquee-track,
-  .spin-slow {
+  .spin-slow,
+  .animate-float,
+  .animate-shimmer,
+  .animate-glow-pulse,
+  .animate-nav-enter {
     animation: none !important;
+    transition: none !important;
+  }
+  
+  .hero-fade-up,
+  .animate-whatsapp-enter,
+  .animate-nav-enter {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -534,5 +550,12 @@
   .animate-glow-pulse {
     animation: none !important;
     transition: none !important;
+  }
+
+  .hero-fade-up,
+  .animate-whatsapp-enter,
+  .animate-nav-enter {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

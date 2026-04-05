@@ -48,8 +48,8 @@ const CustomersLogosSection = () => (
         <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, #0d0520, transparent)" }} />
         <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, #0d0520, transparent)" }} />
 
-        <div className="overflow-hidden" dir="ltr">
-          <div className="marquee-track flex gap-6 items-center py-4 w-max">
+        <div className="overflow-x-auto md:overflow-hidden no-scrollbar" dir="ltr" style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x" }}>
+          <div className="marquee-track flex gap-4 md:gap-6 items-center py-4 px-4 md:px-0 w-max">
             {duplicatedLogos.map((logo, index) => (
               <div key={`${logo.id}-${index}`} className="flex-shrink-0 group">
                 <div
