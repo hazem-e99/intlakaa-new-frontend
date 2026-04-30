@@ -6,6 +6,8 @@ export interface Request {
   phone: string;
   storeUrl: string;
   monthlySales: string;
+  field: string;
+  motivation: string;
   ipAddress: string | null;
   country: string | null;
   phoneCountry: string | null;
@@ -109,6 +111,8 @@ export const createRequest = async (requestData: {
   phone: string;
   storeUrl: string;
   monthlySales: string;
+  field: string;
+  motivation: string;
   ipAddress?: string;
   country?: string;
   phoneCountry?: string;

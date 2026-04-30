@@ -49,6 +49,8 @@ const Form = () => {
         phone: String(entries.phone),
         storeUrl: String(entries.store_url),
         monthlySales: String(entries.monthly_sales),
+        field: String(entries.field),
+        motivation: String(entries.motivation),
         ipAddress,
         country,
         phoneCountry,
@@ -61,6 +63,8 @@ const Form = () => {
         phone: entries.phone,
         store_url: entries.store_url,
         monthly_sales: entries.monthly_sales,
+        field: entries.field,
+        motivation: entries.motivation,
       };
 
       await fetch("https://api.web3forms.com/submit", {
@@ -173,6 +177,30 @@ const Form = () => {
                     type="text"
                     required
                     placeholder="مثال: 50,000 ريال أو وصف المبيعات"
+                    className="form-input text-right"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="field">ما هو مجالك؟</Label>
+                  <Input
+                    id="field"
+                    name="field"
+                    type="text"
+                    required
+                    placeholder="مثال: ملابس، إلكترونيات، عطور..."
+                    className="form-input text-right"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="motivation">ما الذي حفزك على حجز هذه المكالمة؟</Label>
+                  <Input
+                    id="motivation"
+                    name="motivation"
+                    type="text"
+                    required
+                    placeholder="أخبرنا بما دفعك للتواصل معنا"
                     className="form-input text-right"
                   />
                 </div>

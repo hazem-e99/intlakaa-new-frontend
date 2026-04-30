@@ -294,6 +294,8 @@ export default function Requests() {
                           <TableHead className="text-right">الهاتف</TableHead>
                           <TableHead className="text-right">رابط المتجر</TableHead>
                           <TableHead className="text-right">المبيعات الشهرية</TableHead>
+                          <TableHead className="text-right">المجال</TableHead>
+                          <TableHead className="text-right">الدافع</TableHead>
                           <TableHead className="text-right">عنوان الجهاز</TableHead>
                           <TableHead className="text-right">الدولة</TableHead>
                           <TableHead className="text-right">مفتاح الدولة</TableHead>
@@ -325,6 +327,12 @@ export default function Requests() {
                               <Badge variant="secondary">
                                 {request.monthlySales}
                               </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {request.field || '-'}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {request.motivation || '-'}
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground font-mono" dir="ltr">
                               {request.ipAddress || '-'}
@@ -447,6 +455,18 @@ export default function Requests() {
                             >
                               {request.storeUrl}
                             </a>
+                          </div>
+                        )}
+                        {request.field && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">المجال:</p>
+                            <p className="text-sm">{request.field}</p>
+                          </div>
+                        )}
+                        {request.motivation && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">الدافع:</p>
+                            <p className="text-sm">{request.motivation}</p>
                           </div>
                         )}
                         {request.ipAddress && (
