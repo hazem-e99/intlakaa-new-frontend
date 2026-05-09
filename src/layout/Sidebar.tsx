@@ -10,6 +10,7 @@ import {
   Search,
   Settings,
   Globe,
+  Link2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -35,6 +36,11 @@ const navigation = [
     name: "الصفحات والمحتوى",
     href: "/admin/pages",
     icon: Globe,
+  },
+  {
+    name: "صفحة المعلومات (Info)",
+    href: "/admin/info-page",
+    icon: Link2,
   },
   {
     name: "إدارة الأدمنز",

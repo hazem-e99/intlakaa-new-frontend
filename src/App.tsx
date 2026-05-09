@@ -27,6 +27,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const ManageAdmins = lazy(() => import("./pages/ManageAdmins"));
 const SEOManagement = lazy(() => import("./pages/SEOManagement"));
 const PagesManagement = lazy(() => import("./pages/PagesManagement"));
+const InfoPageManagement = lazy(() => import("./pages/InfoPageManagement"));
 const PageEditor = lazy(() => import("./pages/PageEditor"));
 const PostEditor = lazy(() => import("./pages/PostEditor"));
 const Toaster = lazy(() => import("./components/ui/toaster").then((mod) => ({ default: mod.Toaster })));
@@ -125,6 +126,7 @@ const App = () => {
                 <Route path="manage-admins" element={<ManageAdmins />} />
                 <Route path="seo-management" element={<SEOManagement />} />
                 <Route path="pages" element={<PagesManagement />} />
+                <Route path="info-page" element={<InfoPageManagement />} />
                 <Route path="pages/:id" element={<PageEditor />} />
                 <Route path="posts/:id" element={<PostEditor />} />
               </Route>
