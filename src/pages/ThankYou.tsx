@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   FaCheckCircle,
-  FaWhatsapp,
-  FaInstagram,
-  FaEnvelope,
   FaHome,
   FaRocket,
   FaStar
@@ -40,30 +37,6 @@ const ThankYou = () => {
     duration: 2 + Math.random() * 2,
     rotation: Math.random() * 360,
   }));
-
-  const socialLinks = [
-    {
-      icon: FaWhatsapp,
-      label: "واتساب",
-      href: "https://wa.me/966511414537",
-      color: "hover:bg-green-500",
-      bgColor: "bg-green-500/10",
-    },
-    {
-      icon: FaInstagram,
-      label: "إنستغرام",
-      href: "https://instagram.com/antlaqa",
-      color: "hover:bg-pink-500",
-      bgColor: "bg-pink-500/10",
-    },
-    {
-      icon: FaEnvelope,
-      label: "البريد",
-      href: "mailto:info@antlaqa.com",
-      color: "hover:bg-blue-500",
-      bgColor: "bg-blue-500/10",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5 flex items-center justify-center px-4 py-12 relative overflow-hidden">
@@ -210,36 +183,6 @@ const ThankYou = () => {
                       {item.step}
                     </div>
                     <p className="text-base font-medium">{item.text}</p>
-                  </FadeIn>
-                ))}
-              </div>
-            </FadeIn>
-
-            {/* Social Links */}
-            <FadeIn className="space-y-4" delay={1.2} margin="0px">
-              <p className="text-center text-muted-foreground font-medium">
-                أو تواصل معنا مباشرة:
-              </p>
-
-              <div className="grid grid-cols-3 gap-4">
-                {socialLinks.map((social, index) => (
-                  <FadeIn
-                    key={social.label}
-                    as="div"
-                    className="min-w-0"
-                    delay={1.3 + index * 0.1}
-                    direction="scale"
-                    margin="0px"
-                  >
-                    <a
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`cta-hover ${social.bgColor} ${social.color} transition-all duration-300 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-lg border border-transparent hover:border-current group w-full h-full`}
-                    >
-                      <social.icon className="w-8 h-8 transition-transform group-hover:scale-110" />
-                      <span className="text-sm font-bold">{social.label}</span>
-                    </a>
                   </FadeIn>
                 ))}
               </div>

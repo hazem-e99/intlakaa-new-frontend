@@ -1,12 +1,12 @@
 .profile {
-  --li-profile-bg: #eceef1;
-  --li-desktop-frame: color-mix(in srgb, #eceef1 88%, black 12%);
-  --li-button-bg: #ffffff;
-  --li-button-hover: color-mix(in srgb, #ffffff 93%, #000 7%);
-  --li-button-text: #000000;
-  --li-title-text: #000000;
-  --li-description-text: #000000;
-  --li-link-radius: 8px;
+  --li-profile-bg: #0d0520;
+  --li-desktop-frame: #1a0a34;
+  --li-button-bg: rgba(26, 10, 52, 0.65);
+  --li-button-hover: rgba(155, 80, 232, 0.2);
+  --li-button-text: #f5f5f5;
+  --li-title-text: #f5f5f5;
+  --li-description-text: rgba(245, 245, 245, 0.75);
+  --li-link-radius: 14px;
   --li-link-gap: 14px;
   --li-container-width: 580px;
 
@@ -18,7 +18,11 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   color: var(--li-title-text);
   -webkit-font-smoothing: antialiased;
 }
@@ -34,27 +38,30 @@
     margin-top: 40px;
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
-    box-shadow: 0 24px 32px 0 rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0 24px 48px rgba(155, 80, 232, 0.25),
+      0 0 0 1px rgba(155, 80, 232, 0.12);
     padding: 0 calc(var(--li-link-gap) * 2) 64px;
     min-height: calc(100dvh - 2.5rem);
   }
 }
 
 .pageBg {
-  background-color: var(--li-page-bg-mobile, #eceef1);
+  position: relative;
+  background: radial-gradient(ellipse at top, #2a0f55 0%, #0d0520 60%);
   min-height: 100dvh;
 }
 
 @media (min-width: 576px) {
   .pageBg {
-    background-color: var(--li-page-bg-desktop, #cfd1d4);
+    background: radial-gradient(ellipse at top, #3b1470 0%, #0d0520 70%);
   }
 }
 
 .loading {
   text-align: center;
   padding: 80px 16px;
-  color: #666;
+  color: rgba(245, 245, 245, 0.5);
   font-size: 16px;
 }
 
@@ -71,7 +78,7 @@
 }
 
 .profileHeader {
-  padding-top: 96px;
+  padding-top: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,30 +87,44 @@
 
 .profilePicture {
   margin-bottom: 16px;
+  position: relative;
+}
+
+.profilePicture::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #9b50e8, #c084fc, #1a0a34);
+  z-index: 0;
 }
 
 .profilePicture img {
+  position: relative;
+  z-index: 1;
   width: 96px;
   height: 96px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
+  border: 3px solid #0d0520;
 }
 
 .profileTitle {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 800;
   color: var(--li-title-text);
   text-align: center;
   word-wrap: break-word;
+  letter-spacing: -0.02em;
 }
 
 .profileDescription {
-  margin: 4px calc(var(--li-link-gap) * 3) 0;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.5;
+  margin: 6px calc(var(--li-link-gap) * 2) 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
   color: var(--li-description-text);
   text-align: center;
   text-wrap: balance;
@@ -111,7 +132,7 @@
 }
 
 .socialRow {
-  margin-top: 12px;
+  margin-top: 16px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -122,21 +143,29 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 11px;
   border: 0;
-  background: transparent;
-  color: var(--li-title-text);
+  background: rgba(155, 80, 232, 0.55);
+  border-radius: 50%;
+  color: #ffffff;
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
   text-decoration: none;
+  box-shadow: 0 2px 8px rgba(155, 80, 232, 0.35);
 }
 
 .socialIcon:hover {
-  transform: scale(1.075);
+  transform: scale(1.12);
+  background: #9b50e8;
+  box-shadow: 0 4px 16px rgba(155, 80, 232, 0.55);
+  color: #fff;
 }
 
 .linksContainer {
-  margin-top: 24px;
+  margin-top: 28px;
   display: flex;
   flex-direction: column;
   gap: var(--li-link-gap);
@@ -150,15 +179,24 @@
   display: block;
   width: 100%;
   background: var(--li-button-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   color: var(--li-button-text);
   text-decoration: none;
   border-radius: var(--li-link-radius);
-  transition: background 0.2s ease, transform 0.1s ease;
+  border: 1px solid rgba(155, 80, 232, 0.18);
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   outline-offset: 2px;
 }
 
 .linkButton:hover {
   background: var(--li-button-hover);
+  border-color: rgba(155, 80, 232, 0.45);
+  box-shadow: 0 0 20px rgba(155, 80, 232, 0.2);
 }
 
 .linkButton:active {
@@ -199,7 +237,7 @@
 .linkTitle {
   width: 100%;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.2;
   text-align: center;
   text-wrap: balance;
@@ -220,31 +258,32 @@
   top: 50%;
   inset-inline-end: 12px;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 50%;
   border: 0;
   background: transparent;
-  color: var(--li-button-text);
-  opacity: 0.5;
+  color: rgba(245, 245, 245, 0.5);
   cursor: pointer;
-  transition: opacity 0.2s ease, background 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .linkShare:hover {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.1);
+  color: #fff;
+  background: rgba(155, 80, 232, 0.25);
 }
 
 .profileFooter {
   margin-top: auto;
   padding-top: 48px;
   text-align: center;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.5;
-  color: var(--li-title-text);
-  opacity: 0.7;
+  color: rgba(245, 245, 245, 0.35);
 }

@@ -14,7 +14,7 @@ const DEFAULT_CONTACT: ContactInfo[] = [
   { icon: "email",    label: "البريد",    text: "info@antlaqa.com", href: "mailto:info@antlaqa.com" },
 ];
 const DEFAULT_SOCIAL: SocialLink[] = [
-  { icon: "tiktok",   url: "https://www.tiktok.com/@qualified.leads.ksa", label: "TikTok" },
+  { icon: "tiktok",   url: "https://www.tiktok.com/@intlakaa.agency?is_from_webapp=1&sender_device=pc", label: "TikTok" },
   { icon: "facebook", url: "https://www.facebook.com/share/1Vv4xzKZyu",   label: "Facebook" },
   { icon: "linkedin", url: "https://www.linkedin.com/company/intlakaa/",   label: "LinkedIn" },
 ];

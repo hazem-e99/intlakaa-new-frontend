@@ -118,14 +118,6 @@ export default function LinksIntlakaa({ initialData }: Props) {
     } as React.CSSProperties;
   }, [data]);
 
-  const pageBgStyle = useMemo(() => {
-    if (!data) return undefined;
-    return {
-      "--li-page-bg-mobile": data.theme.profileBg,
-      "--li-page-bg-desktop": data.theme.desktopFrame,
-    } as React.CSSProperties;
-  }, [data]);
-
   if (loading) {
     return (
       <div className={styles.pageBg}>
@@ -150,7 +142,12 @@ export default function LinksIntlakaa({ initialData }: Props) {
   const sortedSocials = [...data.socials].sort((a, b) => a.order - b.order);
 
   return (
-    <div className={styles.pageBg} style={pageBgStyle}>
+    <div className={styles.pageBg}>
+      {/* Decorative glow orbs */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+        <div style={{ position: "absolute", top: "10%", right: "-10%", width: 400, height: 400, background: "rgba(155,80,232,0.18)", borderRadius: "50%", filter: "blur(80px)" }} />
+        <div style={{ position: "absolute", bottom: "15%", left: "-10%", width: 320, height: 320, background: "rgba(26,10,52,0.6)", borderRadius: "50%", filter: "blur(60px)" }} />
+      </div>
       <main className={styles.profile} style={themeStyle}>
         <header className={styles.profileHeader}>
           {data.profile.avatar && (
