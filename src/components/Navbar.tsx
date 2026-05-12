@@ -4,7 +4,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { pushGTMEvent } from "@/utils/gtm";
 import { fetchPages, Page } from "@/services/cmsService";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_PAGES_CACHE_KEY = "nav-pages-cache-v1";
 const NAV_PAGES_CACHE_TTL = 30 * 60 * 1000;
@@ -175,15 +175,6 @@ const Navbar = () => {
 
           {/* Right actions */}
           <div className="flex items-center gap-4">
-            <a
-              href="tel:+966511414537"
-              className="hidden md:flex items-center gap-2 text-white/40 hover:text-white/70 transition-colors text-sm"
-              dir="ltr"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              +966 511 414 537
-            </a>
-
             <Link to="/form" onMouseEnter={prefetchForm} className="hidden sm:block">
               <button
                 onClick={() => pushGTMEvent("cta_click", { button_name: "احجز استشارتك المجانية", location: "navbar" })}
@@ -232,9 +223,6 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="h-px my-2" style={{ background: "rgba(155,80,232,0.1)" }} />
-          <a href="tel:+966511414537" className="text-sm text-white/35 px-4 py-2 flex items-center gap-2" dir="ltr">
-            <Phone className="w-3.5 h-3.5" /> +966 511 414 537
-          </a>
           <Link to="/form" onMouseEnter={prefetchForm}>
             <button
               onClick={() => pushGTMEvent("cta_click", { button_name: "navbar_mobile_cta", location: "navbar_mobile" })}

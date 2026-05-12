@@ -83,9 +83,6 @@ const FAQSection = () => {
           <p className="text-white/65 text-lg mb-2 font-medium">ما لقيت إجابة سؤالك؟</p>
           <p className="text-white/40 text-sm mb-6">تواصل معنا مباشرةً وفريقنا جاهز للإجابة في أقرب وقت</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="https://wa.me/966511414537" target="_blank" rel="noopener noreferrer"
-              className="px-7 py-3.5 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-1 shadow-lg" style={{ background: "linear-gradient(135deg, #25d366, #128c7e)" }}>
-              تواصل عبر واتساب</a>
             <a href="/form" className="px-7 py-3.5 rounded-full font-bold text-white text-sm transition-all hover:bg-white/8" style={{ border: "1px solid rgba(155,80,232,0.25)", background: "rgba(155,80,232,0.08)" }}>
               احجز استشارة مجانية</a>
           </div>

@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import { useEffect } from "react";
 import prefetchForm from "@/lib/prefetchForm";
 import LazySection from "@/components/LazySection";
@@ -126,8 +125,6 @@ const Index = () => {
         rootMargin="180px 0px"
       />
 
-      {/* Floating WhatsApp CTA */}
-      <FloatingWhatsAppButton />
     </div>
   );
 };

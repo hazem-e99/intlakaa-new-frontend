@@ -122,14 +122,7 @@ const HeroSection = () => {
                 </button>
               </Link>
 
-              <a href="tel:+966511414537" className="w-full sm:w-auto">
-                <button
-                  className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-bold text-white/90 backdrop-blur-sm transition-all hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{ border: "1px solid rgba(155,80,232,0.35)", background: "rgba(155,80,232,0.08)" }}
-                >
-                  اتصل بنا مباشرة
-                </button>
-              </a>
+
             </div>
 
             {/* Stats */}

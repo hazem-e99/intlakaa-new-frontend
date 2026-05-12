@@ -69,12 +69,7 @@ const Footer = () => {
                   <span className="relative flex items-center gap-3">احجز استشارتك المجانية <ArrowLeft className="w-4 h-4" /></span>
                 </button>
               </Link>
-              <a href="https://wa.me/966511414537" target="_blank" rel="noopener noreferrer">
-                <button
-                  className="cta-hover px-8 py-4 rounded-full font-bold text-white text-base transition-all"
-                  style={{ border: "1px solid rgba(155,80,232,0.25)", background: "rgba(155,80,232,0.08)" }}
-                >واتساب مباشر</button>
-              </a>
+
             </div>
           </FadeIn>
         </div>
@@ -82,41 +77,7 @@ const Footer = () => {
 
       <div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.1), transparent)" }} />
 
-      {activeContacts.length > 0 && (
-        <div className="py-12 px-6">
-          <div className="container mx-auto">
-            <div className={`grid gap-4 max-w-4xl mx-auto ${activeContacts.length === 1 ? "max-w-xs" : activeContacts.length === 2 ? "md:grid-cols-2 max-w-2xl" : "md:grid-cols-3"}`}>
-              {activeContacts.map((contact, index) => {
-                const meta = ICON_MAP[contact.icon] ?? ICON_MAP["globe"];
-                const IconComp = meta.Icon;
-                const isWhatsapp = contact.icon === "whatsapp";
-                return (
-                  <FadeIn key={index} as="a" direction="up" duration={0.45} delay={index * 0.1}
-                    className="hover-lift-sm group rounded-2xl p-5 flex items-center gap-4 transition-all"
-                    style={isWhatsapp
-                      ? { background: "rgba(22,40,20,0.55)", border: "1px solid rgba(37,211,102,0.5)", boxShadow: "0 0 24px rgba(37,211,102,0.28), inset 0 0 18px rgba(37,211,102,0.08)" }
-                      : { background: "rgba(21,11,46,0.5)", border: "1px solid rgba(155,80,232,0.1)" }}
-                    {...{ href: contact.href } as any}
-                  >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all group-hover:scale-110"
-                      style={isWhatsapp
-                        ? { background: "rgba(37,211,102,0.16)", border: "1px solid rgba(37,211,102,0.5)", boxShadow: "0 0 14px rgba(37,211,102,0.3)" }
-                        : { background: "rgba(155,80,232,0.12)", border: "1px solid rgba(155,80,232,0.2)" }}>
-                      <IconComp className="w-5 h-5" style={{ color: isWhatsapp ? "#25d366" : "#9b50e8" }} />
-                    </div>
-                    <div>
-                      <p className={`text-xs mb-0.5 ${isWhatsapp ? "text-emerald-200/85" : "text-white/35"}`}>{contact.label}</p>
-                      <p className={`text-sm font-bold ${isWhatsapp ? "text-white" : "text-white/85"}`} dir="ltr">{contact.text}</p>
-                    </div>
-                  </FadeIn>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.06), transparent)" }} />
+<div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.06), transparent)" }} />
 
       <div className="py-8 px-6">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">

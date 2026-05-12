@@ -81,14 +81,7 @@ const PromoSection = () => (
                 </span>
               </button>
             </Link>
-            <a href="https://wa.me/966511414537" target="_blank" rel="noopener noreferrer">
-              <button
-                className="cta-hover px-8 py-4 rounded-full text-base font-bold text-white transition-all"
-                style={{ border: "1px solid rgba(155,80,232,0.3)", background: "rgba(155,80,232,0.08)" }}
-              >
-                واتساب مباشر
-              </button>
-            </a>
+
           </div>
         </div>
       </FadeIn>
