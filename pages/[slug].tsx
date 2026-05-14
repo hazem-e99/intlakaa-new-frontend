@@ -49,7 +49,7 @@ export default function DynamicRoute({ seo, siteUrl, page }: DynamicRouteProps) 
         type="website"
         structuredData={webPageSchema}
       />
-      <DynamicPageView slug={page.slug} initialPage={page} initialLoaded />
+      <DynamicPageView key={page.slug} slug={page.slug} initialPage={page} initialLoaded />
     </>
   );
 }

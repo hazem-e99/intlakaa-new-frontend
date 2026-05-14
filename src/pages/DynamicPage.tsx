@@ -26,6 +26,14 @@ export default function DynamicPage({
   const [loading, setLoading] = useState(!initialLoaded && !initialPage && !initialNotFound);
   const [notFound, setNotFound] = useState(initialNotFound);
 
+  // Reset state whenever the slug changes (SPA navigation between dynamic pages)
+  useEffect(() => {
+    if (initialLoaded) return;
+    setPage(null);
+    setNotFound(false);
+    setLoading(true);
+  }, [slug, initialLoaded]);
+
   useEffect(() => {
     if (!slug || initialLoaded) return;
 

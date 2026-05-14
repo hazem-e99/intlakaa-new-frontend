@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPageById, createPage, updatePage, Block, Page } from '@/services/cmsService';
+import { fetchPageById, fetchPages, createPage, updatePage, Block, Page } from '@/services/cmsService';
 import { BlockEditor } from '@/components/BlockEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,12 +20,14 @@ export default function PageEditor() {
 
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+  const [allPages, setAllPages] = useState<Pick<Page, '_id' | 'title' | 'slug'>[]>([]);
   const [page, setPage] = useState<Partial<Page>>({
     title: '',
     slug: '',
     type: 'page',
     status: 'draft',
     blocks: [],
+    parentPage: null,
     seoTitle: '',
     seoDescription: '',
   });
@@ -41,6 +43,12 @@ export default function PageEditor() {
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    fetchPages({ type: 'page' }).then(data => {
+      setAllPages(data.map(p => ({ _id: p._id, title: p.title, slug: p.slug })));
+    }).catch(() => {});
+  }, []);
 
   // Auto-generate slug from title
   const handleTitleChange = (title: string) => {
@@ -185,6 +193,28 @@ export default function PageEditor() {
                   </SelectContent>
                 </Select>
               </div>
+              {page.type === 'page' && (
+                <div className="grid gap-2">
+                  <Label>الصفحة الأم (للقوائم المنسدلة)</Label>
+                  <Select
+                    value={page.parentPage || '__none__'}
+                    onValueChange={v => setPage(prev => ({ ...prev, parentPage: v === '__none__' ? null : v }))}
+                  >
+                    <SelectTrigger><SelectValue placeholder="لا يوجد (صفحة رئيسية)" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none__">— لا يوجد (صفحة رئيسية)</SelectItem>
+                      {allPages
+                        .filter(p => p._id !== page._id)
+                        .map(p => (
+                          <SelectItem key={p._id} value={p._id}>
+                            {p.title} ({p.slug})
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">إذا اخترت صفحة أم، ستظهر هذه الصفحة في القائمة المنسدلة عند هوفر الصفحة الأم في الناف بار</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

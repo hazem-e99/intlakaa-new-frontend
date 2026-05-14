@@ -103,14 +103,34 @@ const StringListEditor = ({ items, onChange, placeholder = 'عنصر...' }: { it
 
 const HeadingEditor = ({ content, onChange }: any) => (
   <div className="space-y-2">
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       <Select value={content.level || 'h2'} onValueChange={v => onChange({ ...content, level: v })}>
         <SelectTrigger className="w-24"><SelectValue /></SelectTrigger>
         <SelectContent>{['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map(h => <SelectItem key={h} value={h}>{h.toUpperCase()}</SelectItem>)}</SelectContent>
       </Select>
       <AlignSelect value={content.align} onChange={(v: string) => onChange({ ...content, align: v })} />
+      <div className="flex items-center gap-1.5">
+        <label className="text-xs text-muted-foreground whitespace-nowrap">لون النص:</label>
+        <input
+          type="color"
+          value={content.color || '#000000'}
+          onChange={e => onChange({ ...content, color: e.target.value })}
+          className="w-8 h-8 rounded cursor-pointer border border-border bg-transparent p-0.5"
+          title="لون النص"
+        />
+        {content.color && (
+          <button
+            type="button"
+            onClick={() => onChange({ ...content, color: '' })}
+            className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+            title="إزالة اللون"
+          >
+            ✕
+          </button>
+        )}
+      </div>
     </div>
-    <Input value={content.text || ''} onChange={e => onChange({ ...content, text: e.target.value })} placeholder="اكتب العنوان هنا..." className="text-lg font-bold" dir="rtl" />
+    <Input value={content.text || ''} onChange={e => onChange({ ...content, text: e.target.value })} placeholder="اكتب العنوان هنا..." className="text-lg font-bold" dir="rtl" style={{ color: content.color || undefined }} />
   </div>
 );
 

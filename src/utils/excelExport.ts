@@ -5,7 +5,10 @@ import { Request } from "@/services/requestsService";
  * @param data - Array of request objects to export
  * @param filename - Name of the Excel file (default: requests_export.xlsx)
  */
-export const exportToExcel = async (data: Request[], filename: string = "requests_export.xlsx") => {
+export const exportToExcel = async (
+  data: Request[],
+  filename: string = "requests_export.xlsx",
+) => {
   try {
     const ExcelJS = await import("exceljs");
     const workbook = new ExcelJS.Workbook();
@@ -19,6 +22,8 @@ export const exportToExcel = async (data: Request[], filename: string = "request
       { header: "رقم الهاتف", key: "phone", width: 20 },
       { header: "رابط المتجر", key: "storeUrl", width: 35 },
       { header: "المبيعات الشهرية", key: "monthlySales", width: 20 },
+      { header: "المجال", key: "field", width: 25 },
+      { header: "الدافع", key: "motivation", width: 35 },
       { header: "عنوان الجهاز", key: "ipAddress", width: 18 },
       { header: "الدولة", key: "country", width: 20 },
       { header: "مفتاح الدولة", key: "phoneCountry", width: 20 },
@@ -31,6 +36,8 @@ export const exportToExcel = async (data: Request[], filename: string = "request
         phone: request.phone,
         storeUrl: request.storeUrl,
         monthlySales: request.monthlySales,
+        field: request.field || "-",
+        motivation: request.motivation || "-",
         ipAddress: request.ipAddress || "-",
         country: request.country || "-",
         phoneCountry: request.phoneCountry || "-",
@@ -48,7 +55,11 @@ export const exportToExcel = async (data: Request[], filename: string = "request
     headerRow.font = { bold: true };
 
     worksheet.eachRow((row) => {
-      row.alignment = { vertical: "middle", horizontal: "right", wrapText: true };
+      row.alignment = {
+        vertical: "middle",
+        horizontal: "right",
+        wrapText: true,
+      };
     });
 
     const fileBuffer = await workbook.xlsx.writeBuffer();

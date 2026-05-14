@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowRight, Save, Eye } from 'lucide-react';
+import { ArrowRight, Save, Eye, X, Plus } from 'lucide-react';
 
 export default function PostEditor() {
   const { id } = useParams();
@@ -19,6 +19,14 @@ export default function PostEditor() {
   const isNew = id === 'new';
 
   const [loading, setLoading] = useState(!isNew);
+  const [tagInput, setTagInput] = useState('');
+
+  const addTag = () => {
+    const val = tagInput.trim();
+    if (!val) return;
+    setPost(prev => ({ ...prev, tags: [...(prev.tags || []), val] }));
+    setTagInput('');
+  };
   const [saving, setSaving] = useState(false);
   const [post, setPost] = useState<Partial<Post>>({
     title: '',
@@ -170,13 +178,36 @@ export default function PostEditor() {
                 <Input value={post.author || ''} onChange={e => setPost(prev => ({ ...prev, author: e.target.value }))} placeholder="اسم الكاتب" dir="rtl" />
               </div>
               <div className="grid gap-2">
-                <Label>التاجز (مفصولة بفاصلة)</Label>
-                <Input
-                  value={(post.tags || []).join(', ')}
-                  onChange={e => setPost(prev => ({ ...prev, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) }))}
-                  placeholder="تسويق, ريادة أعمال, نمو"
-                  dir="rtl"
-                />
+                <Label>التاجز</Label>
+                <div className="flex gap-2">
+                  <Input
+                    value={tagInput}
+                    onChange={e => setTagInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
+                    placeholder="أضف تاج..."
+                    dir="rtl"
+                  />
+                  <Button type="button" onClick={addTag} size="sm" variant="outline" className="shrink-0">
+                    <Plus className="h-4 w-4" />
+                    إضافة
+                  </Button>
+                </div>
+                {(post.tags || []).length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {(post.tags || []).map((tag, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary/10 text-primary border border-primary/20">
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => setPost(prev => ({ ...prev, tags: (prev.tags || []).filter((_, idx) => idx !== i) }))}
+                          className="hover:text-destructive transition-colors"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label>الحالة</Label>

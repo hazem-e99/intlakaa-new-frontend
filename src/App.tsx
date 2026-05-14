@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useParams } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import ScrollToTop from "./lib/ScrollToTop";
 import { pushGTMEvent } from "./utils/gtm";
@@ -61,6 +61,12 @@ const PageViewTracker = ({ children }: { children: React.ReactNode }) => {
     });
   }, [location]);
   return <>{children}</>;
+};
+
+// Force remount of DynamicPage when slug changes so state fully resets
+const DynamicPageWithKey = () => {
+  const { slug } = useParams<{ slug: string }>();
+  return <DynamicPage key={slug} />;
 };
 
 const App = () => {
@@ -132,7 +138,7 @@ const App = () => {
               </Route>
 
               {/* Dynamic Pages — must be LAST before catch-all */}
-              <Route path="/:slug" element={<DynamicPage />} />
+              <Route path="/:slug" element={<DynamicPageWithKey />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -1,30 +1,30 @@
-import api from '@/lib/api';
+import api from "@/lib/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type BlockType =
-  | 'heading'
-  | 'paragraph'
-  | 'image'
-  | 'video'
-  | 'html'
-  | 'quote'
-  | 'divider'
-  | 'cta'
-  | 'columns'
-  | 'list'
-  | 'stats'
-  | 'cards'
-  | 'testimonials'
-  | 'team'
-  | 'faq'
-  | 'banner'
-  | 'embed'
-  | 'gallery'
-  | 'alert'
-  | 'spacer'
-  | 'table'
-  | 'steps';
+  | "heading"
+  | "paragraph"
+  | "image"
+  | "video"
+  | "html"
+  | "quote"
+  | "divider"
+  | "cta"
+  | "columns"
+  | "list"
+  | "stats"
+  | "cards"
+  | "testimonials"
+  | "team"
+  | "faq"
+  | "banner"
+  | "embed"
+  | "gallery"
+  | "alert"
+  | "spacer"
+  | "table"
+  | "steps";
 
 export interface Block {
   id: string;
@@ -37,9 +37,10 @@ export interface Page {
   _id: string;
   title: string;
   slug: string;
-  type: 'page' | 'blog' | 'home';
-  status: 'published' | 'draft';
+  type: "page" | "blog" | "home";
+  status: "published" | "draft";
   blocks: Block[];
+  parentPage?: string | null;
   seoTitle?: string;
   seoDescription?: string;
   homeSettings?: Record<string, any>;
@@ -54,7 +55,7 @@ export interface Post {
   excerpt?: string;
   coverImage?: string;
   blocks: Block[];
-  status: 'published' | 'draft';
+  status: "published" | "draft";
   publishedAt?: string;
   seoTitle?: string;
   seoDescription?: string;
@@ -66,8 +67,11 @@ export interface Post {
 
 // ─── Pages API ────────────────────────────────────────────────────────────────
 
-export const fetchPages = async (params?: { type?: string; status?: string }): Promise<Page[]> => {
-  const { data } = await api.get('/pages', { params });
+export const fetchPages = async (params?: {
+  type?: string;
+  status?: string;
+}): Promise<Page[]> => {
+  const { data } = await api.get("/pages", { params });
   return data.data;
 };
 
@@ -82,11 +86,14 @@ export const fetchPageById = async (id: string): Promise<Page> => {
 };
 
 export const createPage = async (page: Partial<Page>): Promise<Page> => {
-  const { data } = await api.post('/pages', page);
+  const { data } = await api.post("/pages", page);
   return data.data;
 };
 
-export const updatePage = async (id: string, page: Partial<Page>): Promise<Page> => {
+export const updatePage = async (
+  id: string,
+  page: Partial<Page>,
+): Promise<Page> => {
   const { data } = await api.put(`/pages/${id}`, page);
   return data.data;
 };
@@ -97,8 +104,12 @@ export const deletePage = async (id: string): Promise<void> => {
 
 // ─── Posts API ────────────────────────────────────────────────────────────────
 
-export const fetchPosts = async (params?: { status?: string; limit?: number; page?: number }): Promise<{ data: Post[]; total: number }> => {
-  const { data } = await api.get('/posts', { params });
+export const fetchPosts = async (params?: {
+  status?: string;
+  limit?: number;
+  page?: number;
+}): Promise<{ data: Post[]; total: number }> => {
+  const { data } = await api.get("/posts", { params });
   return { data: data.data, total: data.total };
 };
 
@@ -113,11 +124,14 @@ export const fetchPostById = async (id: string): Promise<Post> => {
 };
 
 export const createPost = async (post: Partial<Post>): Promise<Post> => {
-  const { data } = await api.post('/posts', post);
+  const { data } = await api.post("/posts", post);
   return data.data;
 };
 
-export const updatePost = async (id: string, post: Partial<Post>): Promise<Post> => {
+export const updatePost = async (
+  id: string,
+  post: Partial<Post>,
+): Promise<Post> => {
   const { data } = await api.put(`/posts/${id}`, post);
   return data.data;
 };

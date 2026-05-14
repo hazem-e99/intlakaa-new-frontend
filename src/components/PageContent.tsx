@@ -11,7 +11,7 @@ const HeadingRenderer = ({ content }: { content: any }) => {
     h3: 'text-2xl md:text-3xl font-semibold', h4: 'text-xl md:text-2xl font-semibold',
     h5: 'text-lg md:text-xl font-medium', h6: 'text-base md:text-lg font-medium',
   };
-  return <Tag className={`${size[content.level || 'h2']} ${align} text-foreground leading-[1.45]`} dir="rtl">{content.text}</Tag>;
+  return <Tag className={`${size[content.level || 'h2']} ${align} text-foreground leading-[1.45]`} dir="rtl" style={{ color: content.color || undefined }}>{content.text}</Tag>;
 };
 
 const ParagraphRenderer = ({ content }: { content: any }) => {
