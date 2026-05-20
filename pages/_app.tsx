@@ -28,6 +28,11 @@ const DynamicTrackingScripts = dynamic(
   }
 );
 
+const FloatingWhatsAppButton = dynamic(
+  () => import("@/components/FloatingWhatsAppButton"),
+  { ssr: false }
+);
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [enableToasters, setEnableToasters] = useState(false);
@@ -111,6 +116,8 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+  const isAdmin = router.asPath.startsWith("/admin");
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className={ibmPlexSansArabic.className}>
@@ -123,6 +130,7 @@ export default function App({ Component, pageProps }: AppProps) {
         ) : null}
 
         <Component {...pageProps} />
+        {!isAdmin && <FloatingWhatsAppButton />}
       </div>
     </QueryClientProvider>
   );

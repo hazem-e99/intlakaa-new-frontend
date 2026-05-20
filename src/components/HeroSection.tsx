@@ -83,11 +83,11 @@ const HeroSection = () => {
             {/* Headline */}
             <div className="hero-visible">
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.32] sm:leading-[1.4] md:leading-[1.6] text-white">
-                <span className="block mb-2 sm:mb-3 md:mb-5">بنساعدك تخلي</span>
+                <span className="block mb-2 sm:mb-3 md:mb-5">نساعدك على تسريع</span>
                 <span className="block">
-                  نموك أسرع و{" "}
+                  نموك وجعل {" "}
                   <span className="text-gradient inline-block mt-1 sm:mt-2 md:mt-2 py-1 sm:py-1.5 md:py-3 px-1">
-                    حملاتك أذكى
+                    حملاتك أكثر ذكاءً
                   </span>
                 </span>
               </h1>
@@ -97,7 +97,7 @@ const HeroSection = () => {
             <p
               className="text-lg md:text-xl text-white/70 leading-[2] font-medium max-w-xl mx-auto lg:mr-auto lg:ml-0 hero-visible"
             >
-              بخطط تسويقية قائمة على النتائج، واستراتيجيات مصممة لعلامتك التجارية — نوصلك لأفضل عائد بأقل مجهود.
+نعتمد على خطط تسويقية قائمة على النتائج، واستراتيجيات مصممة خصيصًا لعلامتك التجارية، لتحقيق أفضل عائد بأقل مجهود.
             </p>
 
             {/* CTAs */}

@@ -388,7 +388,7 @@ export default function SEOManagement() {
 
                             {seo.contactInfo.length > 0 && (
                                 <p className="text-xs text-muted-foreground text-center">
-                                    مثال للرابط: <code className="bg-muted px-1 rounded">tel:+966511414537</code> أو <code className="bg-muted px-1 rounded">https://wa.me/966511414537</code> أو <code className="bg-muted px-1 rounded">mailto:info@domain.com</code>
+                                    مثال للرابط: <code className="bg-muted px-1 rounded">tel:+966568787605</code> أو <code className="bg-muted px-1 rounded">https://wa.me/966568787605</code> أو <code className="bg-muted px-1 rounded">mailto:info@domain.com</code>
                                 </p>
                             )}
                         </CardContent>

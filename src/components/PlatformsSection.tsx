@@ -38,7 +38,7 @@ const PlatformsSection = () => {
             <span className="text-gradient">نُبدع فيها</span>
           </h2>
           <p className="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-            نحول حضورك الرقمي لتجربة استثنائية عبر أقوى المنصات العالمية
+            حوّل حضورك الرقمي إلى تجربة استثنائية عبر أقوى المنصات العالمية
           </p>
         </FadeIn>
 

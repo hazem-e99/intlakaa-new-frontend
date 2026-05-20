@@ -5,7 +5,7 @@ import { AlertTriangle, Crosshair, ShoppingCart, BarChart3, Sparkles } from "luc
 const problems = [
   {
     icon: AlertTriangle,
-    title: "صرف إعلاني بدون عائد",
+    title: "إنفاق إعلاني دون عائد",
     description: "ميزانيات كبيرة تُنفق بدون بيانات واضحة. النتيجة: هدر مال بدون مبيعات.",
     color: "#f97316",
     glow: "rgba(249,115,22,0.28)",
@@ -13,7 +13,7 @@ const problems = [
   {
     icon: Crosshair,
     title: "استهداف غير دقيق",
-    description: "إعلاناتك تصل لأشخاص غير مهتمين. التكلفة ترتفع والطلبات تنخفض.",
+    description: "إعلاناتك تصل إلى أشخاص غير مهتمين. التكلفة ترتفع والطلبات تنخفض.",
     color: "#60a5fa",
     glow: "rgba(96,165,250,0.28)",
   },
@@ -26,7 +26,7 @@ const problems = [
   },
   {
     icon: BarChart3,
-    title: "لا تحليل ولا تحسين",
+    title: "دون تحليل أو تحسين",
     description: "حملات تعمل بدون مراجعة. نفس الأخطاء تتكرر والنمو يتوقف.",
     color: "#34d399",
     glow: "rgba(52,211,153,0.24)",
@@ -124,12 +124,12 @@ const StoreProblemsSection = () => {
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.45] mb-4">
-            هل متجرك يعاني
-            <span className="block text-gradient">من هذه المشاكل؟</span>
+            هل يعاني متجرك
+            <span className="block text-gradient">من هذه المشكلات؟</span>
           </h2>
 
           <p className="text-base sm:text-lg text-white/65 leading-relaxed max-w-3xl mx-auto">
-            لو أي نقطة من القائمة هذه موجودة عندك، فالمشكلة غالبًا في الاستراتيجية والتنفيذ وليس في المنتج نفسه.
+            إذا واجه متجرك إحدى هذه المشكلات، فقد تكون المشكلة في الاستراتيجية والتنفيذ، وليس في المنتج نفسه.
           </p>
         </FadeIn>
 

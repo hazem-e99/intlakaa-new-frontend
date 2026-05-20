@@ -77,7 +77,7 @@ const AdsLanding = () => {
           style={{ background: "rgba(15,5,36,0.9)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(168,85,247,0.15)" }}
         >
           <Image src="/logo.webp" alt="انطلاقة" width={795} height={254} sizes="160px" className="h-10 w-auto" />
-          <a href="https://wa.me/966511414537" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/966568787605" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:-translate-y-0.5"
             style={{ background: "linear-gradient(135deg, #25d366, #128c7e)" }}
           >
@@ -161,7 +161,7 @@ const AdsLanding = () => {
                   </span>
                 </button>
               </Link>
-              <a href="https://wa.me/966511414537" target="_blank" rel="noopener noreferrer">
+              <a href="https://wa.me/966568787605" target="_blank" rel="noopener noreferrer">
                 <button
                   type="button"
                   className="cta-hover px-8 py-5 rounded-full text-base font-bold text-white border border-white/30 hover:bg-white/10 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"

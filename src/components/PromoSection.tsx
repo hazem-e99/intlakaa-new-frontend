@@ -8,7 +8,7 @@ import FadeIn from "@/components/FadeIn";
 const perks = [
   "خطة تسويق مخصصة مجانًا",
   "تحليل منافسيك في 24 ساعة",
-  "لا التزام، لا عقود مُجبرة",
+  "لا التزام، ولا عقود ملزمة",
 ];
 
 const PromoSection = () => (
@@ -46,12 +46,12 @@ const PromoSection = () => (
           </FadeIn>
 
           <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-[1.4]">
-            جاهز تضاعف مبيعاتك؟{" "}
+            هل أنت مستعد لمضاعفة مبيعاتك؟{" "}
             <span className="text-gradient">ابدأ الآن</span>
           </h2>
 
           <p className="text-lg text-white/60 mb-8 max-w-2xl mx-auto leading-relaxed">
-            خطوة واحدة تفصلك عن النمو الحقيقي. احجز استشارتك المجانية وخل فريقنا يدرس وضعك ويبني لك خطة مخصصة.
+            خطوة واحدة تفصلك عن نمو حقيقي. احجز استشارتك المجانية ودع فريقنا يدرس وضعك ويبني لك خطة مخصصة.
           </p>
 
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-10">

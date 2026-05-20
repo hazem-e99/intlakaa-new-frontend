@@ -127,7 +127,7 @@ const Form = () => {
                 ابدأ رحلتك مع انطلاقة
               </h1>
               <p className="text-lg text-center text-muted-foreground mb-8">
-                عبّي البيانات وخلنا نبدأ معك خطوة النمو الحقيقي
+                املأ البيانات ودعنا نبدأ معك خطوة النمو الحقيقي.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -144,7 +144,7 @@ const Form = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone">رقم جوالك</Label>
+                    <Label htmlFor="phone">رقم الجوال</Label>
                     <Input
                       id="phone"
                       name="phone"

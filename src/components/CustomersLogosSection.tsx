@@ -33,7 +33,7 @@ const CustomersLogosSection = () => (
     <div className="container mx-auto">
       <FadeIn direction="up" duration={0.6} className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-black text-white mb-2 leading-[1.5]">
-          نفتخر بثقة أكثر من <span className="text-gradient">علامة تجارية</span>
+          نفتخر بثقة <span className="text-gradient">العديد من العلامات التجارية</span>
         </h2>
         <p className="text-white/40 text-sm">عملاء يثقون بنا لتحقيق نموهم الرقمي</p>
       </FadeIn>

@@ -14,10 +14,10 @@ const services = [
     color: "#9b50e8",
     items: [
       "تخطيط حملات تسويقية مدروسة",
-      "خطة محتوى توصّل رسالتك باحترافية",
-      "سكربتات ومونتاج فيديوهات",
+      "خطة محتوى توصل رسالتك باحترافية",
+      "سكريبتات ومونتاج للفيديوهات",
       "تصميم صفحات هبوط تزيد التحويلات",
-      "تحسين مستمر للأداء (CRO)",
+      "تحسين مستمر للأداء CRO",
       "مدير حساب مخصص معك دائمًا",
     ],
   },
@@ -31,7 +31,7 @@ const services = [
       "إعداد الحملات بالطريقة الصحيحة",
       "توجيه بنوع المحتوى المطلوب للإعلان",
       "متابعة يومية وتعديل مستمر",
-      "تقارير شفافة توريك العائد الفعلي",
+      "تقارير شفافة توضّح لك العائد الفعلي",
     ],
   },
   {
@@ -168,8 +168,8 @@ const ServicesSection = () => (
         </div>
 
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-white leading-[1.45]">
-          وش نقدر نضيف
-          <span className="block text-gradient">لمشروعك؟</span>
+          ما الذي يمكننا إضافته
+          <span className="block text-gradient">إلى مشروعك؟</span>
         </h2>
 
         <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">
@@ -206,10 +206,10 @@ const ServicesSection = () => (
           <div className="relative z-10 grid md:grid-cols-[1.35fr_auto] gap-6 items-center">
             <div className="text-center md:text-right">
               <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2 leading-[1.45]">
-                مو متأكد أي باقة تناسب هدفك الحالي؟
+                لست متأكداً من الباقة التي تناسب هدفك الحالي؟
               </h3>
               <p className="text-white/65 text-base sm:text-lg leading-relaxed">
-                احجز استشارة مجانية، ونطلع لك بخطة تنفيذ واضحة تناسب ميزانيتك ومرحلة مشروعك.
+                احجز استشارة مجانية، وسنقدّم لك خطة تنفيذ واضحة تناسب ميزانيتك ومرحلة مشروعك.
               </p>
             </div>
 

@@ -101,7 +101,7 @@ function PostCard({ post }: { post: Post }) {
       <div className="p-5 space-y-3">
         {post.tags && post.tags.length > 0 && (
           <div className="flex gap-2 flex-wrap">
-            {post.tags.slice(0, 2).map(tag => (
+            {post.tags.map(tag => (
               <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
             ))}
           </div>

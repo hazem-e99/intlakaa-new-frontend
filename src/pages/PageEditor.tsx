@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPageById, fetchPages, createPage, updatePage, Block, Page } from '@/services/cmsService';
+import { triggerRevalidation } from '@/lib/revalidate';
 import { BlockEditor } from '@/components/BlockEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -80,6 +81,9 @@ export default function PageEditor() {
       } else {
         const updated = await updatePage(id!, data);
         setPage(updated);
+        // Revalidate the public page immediately so changes are visible
+        const pagePath = updated.type === 'home' ? '/' : `/${updated.slug}`;
+        triggerRevalidation([pagePath]);
         toast({ title: '✅ تم الحفظ بنجاح' });
       }
     } catch (err: any) {

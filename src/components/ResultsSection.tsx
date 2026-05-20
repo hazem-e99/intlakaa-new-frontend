@@ -12,7 +12,7 @@ function StatNumber({ target, suffix = "", prefix = "" }: { target: number; suff
 const results = [
   { icon: TrendingUp,  value: 100, suffix: "M+", prefix: "+", label: "ريال مبيعات مُدارة", description: "حجم المبيعات الإجمالية التي أدرناها لعملائنا منذ انطلاقتنا بنجاح تام", color: "#34d399", delay: 0 },
   { icon: Users,       value: 220, suffix: "+", prefix: "", label: "شريك نجاح",          description: "عملاء حققوا نتائج قياسية وتوسعوا في السوق السعودي والخليجي", color: "#fbbf24", delay: 0.1 },
-  { icon: Target,      value: 500, suffix: "+", prefix: "", label: "حملة إعلانية ناجحة", description: "حملات فائقة الدقة على Meta و TikTok و Google أنتجت عائدًا مضاعفًا", color: "#60a5fa", delay: 0.2 },
+  { icon: Target,      value: 500, suffix: "+", prefix: "", label: "حملة إعلانية ناجحة", description: "حملات فائقة الدقة على Meta و TikTok و Google حققت عائدًا مضاعفًا", color: "#60a5fa", delay: 0.2 },
   { icon: Rocket,      value: 340, suffix: "%", prefix: "+", label: "متوسط نمو المبيعات", description: "المعدل الوسيط لنمو مبيعات عملائنا خلال أول 90 يومًا فقط من العمل", color: "#f472b6", delay: 0.3 },
 ];
 
@@ -143,7 +143,7 @@ const ResultsSection = () => (
           <div className="relative">
             <div className="absolute -right-6 top-0 bottom-0 w-1.5 rounded-full" style={{ background: "linear-gradient(to bottom, #7c3aed, transparent)" }} />
             <p className="text-2xl md:text-3xl lg:text-[2rem] text-white/80 leading-[1.7] font-bold">
-              لسنا وكالة تعد بالوعود — نحن وكالة تُثبت بالأرقام.
+              لسنا وكالة تكتفي بالوعود ——— نحن وكالة تُثبت نجاحها بالأرقام.
             </p>
             <p className="text-lg md:text-xl text-white/50 leading-[1.8] font-medium mt-6">
               هذه هي نتائجنا الفعلية التي تدفع نمو أعمال ومبيعات شركائنا إلى مستويات غير مسبوقة. أرقام حقيقية تصنع الفارق.
