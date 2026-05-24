@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+﻿import { Link, useLocation } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 import { memo, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -9,19 +9,45 @@ import { Menu, X } from "lucide-react";
 const NAV_PAGES_CACHE_KEY = "nav-pages-cache-v1";
 const NAV_PAGES_CACHE_TTL = 30 * 60 * 1000;
 
+type NavPage = Pick<Page, "_id" | "title" | "slug" | "parentPage">;
+
 type CachedNavPages = {
   timestamp: number;
-  pages: Array<Pick<Page, "title" | "slug">>;
+  pages: NavPage[];
 };
 
-const getCachedPages = (): { pages: Array<Pick<Page, "title" | "slug">>; isFresh: boolean } => {
+type NavLinkNode = {
+  title: string;
+  slug: string;
+  children: Array<{ title: string; slug: string }>;
+};
+
+const isValidCachedPage = (page: unknown): page is NavPage => {
+  if (!page || typeof page !== "object") return false;
+  const p = page as Record<string, unknown>;
+  const hasRequired =
+    typeof p._id === "string" &&
+    typeof p.title === "string" &&
+    typeof p.slug === "string";
+  const hasValidParent =
+    p.parentPage === null ||
+    p.parentPage === undefined ||
+    typeof p.parentPage === "string";
+  return hasRequired && hasValidParent;
+};
+
+const getCachedPages = (): { pages: NavPage[]; isFresh: boolean } => {
   try {
     const raw = sessionStorage.getItem(NAV_PAGES_CACHE_KEY);
     if (!raw) return { pages: [], isFresh: false };
     const parsed = JSON.parse(raw) as CachedNavPages;
-    const isFresh = Date.now() - parsed.timestamp < NAV_PAGES_CACHE_TTL;
+    const normalized = Array.isArray(parsed.pages)
+      ? parsed.pages.filter(isValidCachedPage)
+      : [];
+    const hasLegacyShape = Array.isArray(parsed.pages) && normalized.length !== parsed.pages.length;
+    const isFresh = Date.now() - parsed.timestamp < NAV_PAGES_CACHE_TTL && !hasLegacyShape;
     return {
-      pages: Array.isArray(parsed.pages) ? parsed.pages : [],
+      pages: normalized,
       isFresh,
     };
   } catch {
@@ -29,7 +55,7 @@ const getCachedPages = (): { pages: Array<Pick<Page, "title" | "slug">>; isFresh
   }
 };
 
-const setCachedPages = (pages: Array<Pick<Page, "title" | "slug">>) => {
+const setCachedPages = (pages: NavPage[]) => {
   const payload: CachedNavPages = { timestamp: Date.now(), pages };
   sessionStorage.setItem(NAV_PAGES_CACHE_KEY, JSON.stringify(payload));
 };
@@ -55,7 +81,7 @@ const scheduleIdleTask = (task: () => void) => {
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [pages, setPages] = useState<Array<Pick<Page, "title" | "slug">>>([]);
+  const [pages, setPages] = useState<NavPage[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -97,9 +123,11 @@ const Navbar = () => {
     const cancelIdleTask = scheduleIdleTask(async () => {
       try {
         const publishedPages = await fetchPages({ status: "published", type: "page" });
-        const normalizedPages = publishedPages.map((page) => ({
+        const normalizedPages: NavPage[] = publishedPages.map((page) => ({
+          _id: page._id,
           title: page.title,
           slug: page.slug,
+          parentPage: page.parentPage ?? null,
         }));
 
         if (!active) return;
@@ -116,14 +144,24 @@ const Navbar = () => {
     };
   }, []);
 
-  const navLinks = useMemo(
-    () => [
-      { title: "الرئيسية", slug: "" },
-      ...pages.map((page) => ({ title: page.title, slug: page.slug })),
-      { title: "المدونة", slug: "blog" },
-    ],
-    [pages]
-  );
+  const navLinks = useMemo<NavLinkNode[]>(() => {
+    const parentPages = pages.filter((page) => !page.parentPage);
+    const childPages = pages.filter((page) => !!page.parentPage);
+
+    const pageTree = parentPages.map((parent) => ({
+      title: parent.title,
+      slug: parent.slug,
+      children: childPages
+        .filter((child) => child.parentPage === parent._id)
+        .map((child) => ({ title: child.title, slug: child.slug })),
+    }));
+
+    return [
+      { title: "الرئيسية", slug: "", children: [] },
+      ...pageTree,
+      { title: "المدونة", slug: "blog", children: [] },
+    ];
+  }, [pages]);
 
   return (
     <nav
@@ -136,7 +174,6 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
-          {/* Logo */}
           <Link to="/" className="flex items-center flex-shrink-0 relative group py-1">
             <Image
               src="/logo.webp"
@@ -149,31 +186,50 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map(link => {
+            {navLinks.map((link) => {
               const isActive = location.pathname === `/${link.slug}`;
+              const hasChildren = link.children.length > 0;
+
               return (
-                <Link
-                  key={link.slug}
-                  to={`/${link.slug}`}
-                  className={`relative text-sm font-semibold py-1 transition-all duration-300 ${
-                    isActive ? "text-white" : "text-white/50 hover:text-white/85"
-                  }`}
-                >
-                  {link.title}
-                  <span
-                    className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-transform duration-300 ${
-                      isActive ? "scale-x-100" : "scale-x-0"
+                <div key={link.slug || "home"} className="relative group">
+                  <Link
+                    to={`/${link.slug}`}
+                    className={`relative text-sm font-semibold py-1 transition-all duration-300 ${
+                      isActive ? "text-white" : "text-white/50 hover:text-white/85"
                     }`}
-                    style={{ background: "linear-gradient(90deg, #9b50e8, #c084fc)" }}
-                  />
-                </Link>
+                  >
+                    {link.title}
+                    <span
+                      className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full transition-transform duration-300 ${
+                        isActive ? "scale-x-100" : "scale-x-0"
+                      }`}
+                      style={{ background: "linear-gradient(90deg, #9b50e8, #c084fc)" }}
+                    />
+                  </Link>
+
+                  {hasChildren && (
+                    <div className="absolute top-full right-0 mt-2 min-w-[180px] rounded-xl border border-white/10 bg-[#14072D]/95 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl">
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.slug}
+                          to={`/${child.slug}`}
+                          className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                            location.pathname === `/${child.slug}`
+                              ? "text-white bg-white/10"
+                              : "text-white/70 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          {child.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
 
-          {/* Right actions */}
           <div className="flex items-center gap-4">
             <Link to="/form" onMouseEnter={prefetchForm} className="hidden sm:block">
               <button
@@ -196,7 +252,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={`lg:hidden overflow-hidden transition-[max-height,opacity] duration-300 ${
           isMenuOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
@@ -205,22 +260,41 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4 py-6 flex flex-col gap-2">
           {navLinks.map((link) => (
-            <Link
-              key={link.slug}
-              to={`/${link.slug}`}
-              className={`text-base font-semibold py-3 px-4 rounded-xl transition-all ${
-                location.pathname === `/${link.slug}`
-                  ? "text-white"
-                  : "text-white/50 hover:text-white hover:bg-white/5"
-              }`}
-              style={
-                location.pathname === `/${link.slug}`
-                  ? { background: "rgba(155,80,232,0.15)", border: "1px solid rgba(155,80,232,0.25)" }
-                  : {}
-              }
-            >
-              {link.title}
-            </Link>
+            <div key={link.slug || "home"}>
+              <Link
+                to={`/${link.slug}`}
+                className={`text-base font-semibold py-3 px-4 rounded-xl transition-all block ${
+                  location.pathname === `/${link.slug}`
+                    ? "text-white"
+                    : "text-white/50 hover:text-white hover:bg-white/5"
+                }`}
+                style={
+                  location.pathname === `/${link.slug}`
+                    ? { background: "rgba(155,80,232,0.15)", border: "1px solid rgba(155,80,232,0.25)" }
+                    : {}
+                }
+              >
+                {link.title}
+              </Link>
+
+              {link.children.length > 0 && (
+                <div className="mt-1 mr-4 border-r border-white/10 pr-3 space-y-1">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.slug}
+                      to={`/${child.slug}`}
+                      className={`block text-sm py-2 px-3 rounded-lg transition-all ${
+                        location.pathname === `/${child.slug}`
+                          ? "text-white bg-white/10"
+                          : "text-white/60 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {child.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
           <div className="h-px my-2" style={{ background: "rgba(155,80,232,0.1)" }} />
           <Link to="/form" onMouseEnter={prefetchForm}>

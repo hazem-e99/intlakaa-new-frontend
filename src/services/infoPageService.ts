@@ -68,6 +68,7 @@ export const SOCIAL_ICON_OPTIONS = [
   "youtube",
   "facebook",
   "snapchat",
+  "linkedin",
 ] as const;
 
 export type SocialIconKey = (typeof SOCIAL_ICON_OPTIONS)[number];
