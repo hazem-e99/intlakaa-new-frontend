@@ -37,6 +37,7 @@ export default function BlogIndexRoute({ seo, siteUrl, initialPosts }: BlogIndex
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={`المدونة | ${baseTitle}`}
         description="أحدث المقالات والرؤى في عالم التسويق والنمو من فريق انطلاقة."
         keywords={seo?.keywords}

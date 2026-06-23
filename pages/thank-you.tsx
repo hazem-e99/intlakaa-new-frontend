@@ -16,6 +16,7 @@ export default function ThankYouRoute({ seo, siteUrl }: ThankYouRouteProps) {
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={`شكرا لتواصلك معنا | ${baseTitle}`}
         description="تم استلام طلبك بنجاح. سيتواصل معك فريق انطلاقة في أقرب وقت."
         canonicalPath="/thank-you"

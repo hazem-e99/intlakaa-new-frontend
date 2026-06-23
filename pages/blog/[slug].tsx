@@ -49,6 +49,7 @@ export default function BlogPostRoute({ seo, siteUrl, post }: BlogPostRouteProps
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={title}
         description={description}
         keywords={seo?.keywords}

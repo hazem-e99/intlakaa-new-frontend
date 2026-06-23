@@ -41,6 +41,7 @@ export default function DynamicRoute({ seo, siteUrl, page }: DynamicRouteProps) 
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={title}
         description={description}
         keywords={seo?.keywords}

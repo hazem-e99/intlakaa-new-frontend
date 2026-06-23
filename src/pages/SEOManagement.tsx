@@ -14,7 +14,13 @@ import {
     fetchSeoSettings, saveSeoSettings, syncSeoFromHtml,
     type SeoSettings, type SocialLink, type ContactInfo,
 } from "@/services/seoService";
+import { triggerRevalidation } from "@/lib/revalidate";
 import { SOCIAL_ICON_OPTIONS, ICON_MAP } from "@/lib/iconMap";
+
+// Public, statically-generated paths whose <head> reflects SEO settings.
+// Revalidated on save so admin changes (e.g. Google Search Console verification)
+// appear in View Source immediately instead of waiting for the ISR interval.
+const SEO_PUBLIC_PATHS = ["/", "/ads", "/form", "/info", "/blog", "/thank-you"];
 
 // ─── Reusable Icon Picker ─────────────────────────────────────────────────────
 function IconPicker({ value, onChange }: { value: string; onChange: (id: string) => void }) {
@@ -239,6 +245,9 @@ export default function SEOManagement() {
         try {
             const updated = await saveSeoSettings(seo);
             setSeo({ ...defaultSeo, ...updated, socialLinks: updated.socialLinks ?? [], contactInfo: updated.contactInfo ?? [] });
+            // Rebuild the public static pages now so the new SEO head (incl. the
+            // google-site-verification tag) is visible in View Source immediately.
+            await triggerRevalidation(SEO_PUBLIC_PATHS);
             toast({ title: "✅ تم الحفظ", description: "تم تحديث إعدادات SEO وتطبيقها على الموقع بنجاح" });
         } catch {
             toast({ title: "خطأ في الحفظ", variant: "destructive" });

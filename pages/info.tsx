@@ -23,6 +23,7 @@ export default function InfoRoute({ seo, siteUrl }: InfoRouteProps) {
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={`روابط انطلاقة | ${baseTitle}`}
         description={description}
         canonicalPath="/info"

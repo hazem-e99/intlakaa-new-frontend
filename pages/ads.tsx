@@ -28,6 +28,7 @@ export default function AdsRoute({ seo, siteUrl }: AdsRouteProps) {
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={`ضاعف مبيعاتك في 90 يومًا | ${baseTitle}`}
         description={description}
         canonicalPath="/ads"

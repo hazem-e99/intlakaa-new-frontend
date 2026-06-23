@@ -28,6 +28,7 @@ export default function FormRoute({ seo, siteUrl }: FormRouteProps) {
     <>
       <SeoHead
         siteUrl={siteUrl}
+        googleSiteVerification={seo?.googleConsole}
         title={`احجز استشارتك المجانية | ${baseTitle}`}
         description={description}
         keywords={seo?.keywords}

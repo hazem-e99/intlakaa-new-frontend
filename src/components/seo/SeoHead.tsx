@@ -13,6 +13,8 @@ type SeoHeadProps = {
   noIndex?: boolean;
   locale?: string;
   structuredData?: JsonLd | JsonLd[];
+  /** Google Search Console verification token (from SEO settings `googleConsole`). */
+  googleSiteVerification?: string;
 };
 
 const toCanonical = (siteUrl: string, canonicalPath?: string) => {
@@ -47,14 +49,17 @@ export function SeoHead({
   noIndex = false,
   locale = "ar_SA",
   structuredData,
+  googleSiteVerification,
 }: SeoHeadProps) {
   const canonical = toCanonical(siteUrl, canonicalPath);
   const imageUrl = toAbsoluteImage(siteUrl, image);
   const structured = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
+  const verification = googleSiteVerification?.trim();
 
   return (
     <Head>
       <title>{title}</title>
+      {verification ? <meta name="google-site-verification" content={verification} /> : null}
       {description ? <meta name="description" content={description} /> : null}
       {keywords ? <meta name="keywords" content={keywords} /> : null}
       {canonical ? <link rel="canonical" href={canonical} /> : null}
